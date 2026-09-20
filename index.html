@@ -296,6 +296,88 @@
   .config-row{display:flex; gap:10px;}
   .config-row .btn{flex:1;}
 
+  /* ---------- Gerenciar categorias / contas ---------- */
+  .manage-list{display:flex; flex-direction:column; gap:8px; margin-bottom:12px;}
+  .manage-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 12px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-s);
+  }
+  .manage-row .name{
+    flex:1;
+    min-width:0;
+    font-size:13.5px;
+    font-weight:500;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+  }
+  .manage-row .bucket-tag{
+    flex:none;
+    font-size:10px;
+    color:var(--text-muted);
+    border:1px solid var(--border);
+    border-radius:999px;
+    padding:3px 8px;
+    white-space:nowrap;
+  }
+  .manage-row .icon-btn{
+    flex:none;
+    width:30px; height:30px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:var(--surface-2);
+    color:var(--text-muted);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .manage-row .icon-btn svg{width:14px; height:14px;}
+  .manage-row .icon-btn.danger:active{color:var(--expense); border-color:var(--expense-dim);}
+  .manage-empty{font-size:12.5px; color:var(--text-muted); padding:4px 0 8px;}
+  .manage-edit-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    padding:12px;
+    background:var(--surface-2);
+    border:1px dashed var(--border);
+    border-radius:var(--radius-s);
+  }
+  .manage-edit-row input, .manage-edit-row select{
+    flex:1;
+    min-width:120px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-s);
+    color:var(--text);
+    font-size:14px;
+    padding:10px;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .manage-edit-row .edit-actions{display:flex; gap:8px; width:100%;}
+  .manage-edit-row .edit-actions .btn{flex:1; margin-top:0;}
+  .manage-add-row{
+    display:flex;
+    flex-wrap:wrap;
+    gap:8px;
+    margin-bottom:24px;
+  }
+  .manage-add-row input, .manage-add-row select{
+    flex:1;
+    min-width:120px;
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:var(--radius-s);
+    color:var(--text);
+    font-size:14px;
+    padding:10px 12px;
+    font-family:'IBM Plex Sans', sans-serif;
+  }
+  .manage-add-row .btn{width:100%; margin-top:0;}
+
   /* ---------- Projeção ---------- */
   .proj-row{
     display:flex;
@@ -660,18 +742,15 @@
 
     <div class="field">
       <label for="fAccount">Conta</label>
-      <input type="text" id="fAccount" list="accountList" placeholder="Ex: NuConta, C6, dinheiro…">
-      <datalist id="accountList">
-        <option value="NuConta">
-        <option value="C6">
-        <option value="XP">
-        <option value="BTG">
-        <option value="PORTO">
-        <option value="VA">
-        <option value="VR">
-        <option value="Caju">
-        <option value="Dinheiro">
-      </datalist>
+      <select id="fAccount"></select>
+    </div>
+
+    <div class="cat-add-row" id="accAddRow" style="display:none;">
+      <div class="field">
+        <label for="fNewAccName">Nome da nova conta</label>
+        <input type="text" id="fNewAccName" placeholder="Ex: NuConta, C6, dinheiro…">
+      </div>
+      <button type="button" class="btn btn-primary btn-small" id="addAccBtn">Adicionar conta</button>
     </div>
 
     <div class="check-row" id="essentialRow">
@@ -723,6 +802,7 @@
   const TXN_KEY = 'fluxo_transactions';
   const TARGET_KEY = 'fluxo_budget_targets';
   const CATEGORY_KEY = 'fluxo_categories';
+  const ACCOUNT_KEY = 'fluxo_accounts';
 
   const DEFAULT_TARGETS = {
     'FIXA': 40, 'LAZER': 10, 'PRAZERES': 10, 'CONFORTO': 5,
@@ -746,6 +826,12 @@
   };
   const PAY_LABELS = { pix: 'PIX', debito: 'Débito', credito: 'Crédito' };
 
+  // Contas usadas para marcar de onde saiu/entrou o dinheiro
+  const DEFAULT_ACCOUNTS = ['NuConta', 'C6', 'XP', 'BTG', 'PORTO', 'VA', 'VR', 'Caju', 'Dinheiro'];
+
+  const ICON_EDIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+  const ICON_DEL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>`;
+
   // Lançamentos futuros importados da planilha (Setembro/2026 em diante),
   // usados para semear o app na primeira vez que ele roda (não sobrescreve
   // dados que você já tenha lançado manualmente).
@@ -755,11 +841,14 @@
     transactions: [],
     targets: {...DEFAULT_TARGETS},
     categories: {...DEFAULT_CATEGORIES},
+    accounts: [...DEFAULT_ACCOUNTS],
     currentMonth: new Date(),
     activeTab: 'resumo',
     formType: 'despesa',
     paymentMethod: 'pix',
-    editingId: null
+    editingId: null,
+    editingCategoryName: null,
+    editingAccountName: null
   };
 
   const fmtBRL = (n) => new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(n || 0);
@@ -772,7 +861,12 @@
   const todayISO = () => new Date().toISOString().slice(0,10);
   const addMonths = (isoDate, n) => {
     const [y,m,d] = isoDate.split('-').map(Number);
-    const dt = new Date(y, (m-1) + n, d);
+    const targetMonthIndex = (m-1) + n;
+    // último dia do mês de destino (dia 0 do mês seguinte)
+    const lastDayOfTargetMonth = new Date(y, targetMonthIndex + 1, 0).getDate();
+    // limita o dia ao último dia válido do mês de destino, evitando "estourar" para o mês seguinte
+    const safeDay = Math.min(d, lastDayOfTargetMonth);
+    const dt = new Date(y, targetMonthIndex, safeDay);
     return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
   };
 
@@ -789,8 +883,10 @@
     const txns = await Storage.get(TXN_KEY);
     const targets = await Storage.get(TARGET_KEY);
     const categories = await Storage.get(CATEGORY_KEY);
+    const accounts = await Storage.get(ACCOUNT_KEY);
     state.targets = targets && typeof targets === 'object' ? targets : {...DEFAULT_TARGETS};
     state.categories = categories && typeof categories === 'object' ? categories : {...DEFAULT_CATEGORIES};
+    state.accounts = Array.isArray(accounts) ? accounts : [...DEFAULT_ACCOUNTS];
     if (Array.isArray(txns)){
       // já existe uma chave salva (mesmo vazia, ex: depois de "Apagar tudo") — respeita como está
       state.transactions = txns;
@@ -799,10 +895,54 @@
       state.transactions = SEED_TRANSACTIONS.map(t => ({...t}));
       await saveTxns();
     }
+    // migração: garante que contas já usadas em lançamentos antigos (texto livre) apareçam na lista gerenciável
+    const usedAccounts = new Set(state.transactions.map(t => t.account).filter(Boolean));
+    let accountsChanged = false;
+    usedAccounts.forEach(a => {
+      if (!state.accounts.some(x => x.toLowerCase() === a.toLowerCase())){
+        state.accounts.push(a);
+        accountsChanged = true;
+      }
+    });
+    if (accountsChanged) await saveAccounts();
   }
   async function saveTxns(){ await Storage.set(TXN_KEY, state.transactions); }
   async function saveTargets(){ await Storage.set(TARGET_KEY, state.targets); }
   async function saveCategories(){ await Storage.set(CATEGORY_KEY, state.categories); }
+  async function saveAccounts(){ await Storage.set(ACCOUNT_KEY, state.accounts); }
+
+  /* ---------------- categorias / contas: renomear, excluir, contar uso ---------------- */
+  function categoryInUseCount(name){
+    return state.transactions.filter(t => t.category === name).length;
+  }
+  function renameCategory(oldName, newName, newBucket){
+    const bucketChanged = state.categories[oldName] !== newBucket;
+    if (oldName !== newName) delete state.categories[oldName];
+    state.categories[newName] = newBucket;
+    if (oldName !== newName || bucketChanged){
+      state.transactions.forEach(t => {
+        if (t.category === oldName){
+          t.category = newName;
+          t.bucket = newBucket;
+        }
+      });
+    }
+  }
+  function deleteCategoryByName(name){
+    delete state.categories[name];
+  }
+  function accountInUseCount(name){
+    return state.transactions.filter(t => t.account === name).length;
+  }
+  function renameAccountByName(oldName, newName){
+    state.accounts = state.accounts.map(a => a === oldName ? newName : a);
+    if (oldName !== newName){
+      state.transactions.forEach(t => { if (t.account === oldName) t.account = newName; });
+    }
+  }
+  function deleteAccountByName(name){
+    state.accounts = state.accounts.filter(a => a !== name);
+  }
 
   /* ---------------- computations ---------------- */
   function txnsForMonth(mk){
@@ -945,6 +1085,57 @@
     return d.innerHTML;
   }
 
+  function bucketOptionsHtml(selected){
+    return BUCKETS.map(b => `<option value="${b}" ${b === selected ? 'selected' : ''}>${b}</option>`).join('');
+  }
+
+  function renderCategoryManageRows(){
+    const names = Object.keys(state.categories);
+    if (names.length === 0) return `<p class="manage-empty">Nenhuma categoria cadastrada ainda.</p>`;
+    return names.map(cat => {
+      if (state.editingCategoryName === cat){
+        return `
+          <div class="manage-edit-row">
+            <input type="text" class="cat-edit-name" value="${escapeHtml(cat)}">
+            <select class="cat-edit-bucket">${bucketOptionsHtml(state.categories[cat])}</select>
+            <div class="edit-actions">
+              <button type="button" class="btn btn-ghost btn-small" data-cat-edit-cancel="${escapeHtml(cat)}">Cancelar</button>
+              <button type="button" class="btn btn-primary btn-small" data-cat-edit-save="${escapeHtml(cat)}">Salvar</button>
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="manage-row">
+          <span class="name">${escapeHtml(cat)}</span>
+          <span class="bucket-tag">${state.categories[cat]}</span>
+          <button type="button" class="icon-btn" data-cat-edit="${escapeHtml(cat)}" aria-label="Editar categoria">${ICON_EDIT}</button>
+          <button type="button" class="icon-btn danger" data-cat-del="${escapeHtml(cat)}" aria-label="Excluir categoria">${ICON_DEL}</button>
+        </div>`;
+    }).join('');
+  }
+
+  function renderAccountManageRows(){
+    if (state.accounts.length === 0) return `<p class="manage-empty">Nenhuma conta cadastrada ainda.</p>`;
+    return state.accounts.map(acc => {
+      if (state.editingAccountName === acc){
+        return `
+          <div class="manage-edit-row">
+            <input type="text" class="acc-edit-name" value="${escapeHtml(acc)}">
+            <div class="edit-actions">
+              <button type="button" class="btn btn-ghost btn-small" data-acc-edit-cancel="${escapeHtml(acc)}">Cancelar</button>
+              <button type="button" class="btn btn-primary btn-small" data-acc-edit-save="${escapeHtml(acc)}">Salvar</button>
+            </div>
+          </div>`;
+      }
+      return `
+        <div class="manage-row">
+          <span class="name">${escapeHtml(acc)}</span>
+          <button type="button" class="icon-btn" data-acc-edit="${escapeHtml(acc)}" aria-label="Editar conta">${ICON_EDIT}</button>
+          <button type="button" class="icon-btn danger" data-acc-del="${escapeHtml(acc)}" aria-label="Excluir conta">${ICON_DEL}</button>
+        </div>`;
+    }).join('');
+  }
+
   /* ---------------- rendering: Metas ---------------- */
   function renderMetas(){
     const el = document.getElementById('view-metas');
@@ -977,6 +1168,27 @@
       <button class="btn btn-ghost" id="loadSeedBtn">Carregar base da planilha</button>
       ` : ''}
 
+      <p class="section-title" style="margin-top:32px;">Categorias</p>
+      <p style="font-size:12.5px; color:var(--text-muted); margin:-6px 0 12px; line-height:1.5;">
+        Crie, renomeie ou exclua categorias de despesa. Excluir uma categoria não altera lançamentos já lançados com ela.
+      </p>
+      <div class="manage-list" id="catManageList">${renderCategoryManageRows()}</div>
+      <div class="manage-add-row">
+        <input type="text" id="mNewCatName" placeholder="Nova categoria">
+        <select id="mNewCatBucket">${bucketOptionsHtml()}</select>
+        <button type="button" class="btn btn-primary btn-small" id="mAddCatBtn">Adicionar categoria</button>
+      </div>
+
+      <p class="section-title" style="margin-top:32px;">Contas</p>
+      <p style="font-size:12.5px; color:var(--text-muted); margin:-6px 0 12px; line-height:1.5;">
+        Crie, renomeie ou exclua as contas usadas nos lançamentos (bancos, cartões, dinheiro etc.).
+      </p>
+      <div class="manage-list" id="accManageList">${renderAccountManageRows()}</div>
+      <div class="manage-add-row">
+        <input type="text" id="mNewAccName" placeholder="Nova conta">
+        <button type="button" class="btn btn-primary btn-small" id="mAddAccBtn">Adicionar conta</button>
+      </div>
+
       <p class="section-title" style="margin-top:32px;">Seus dados</p>
       <div class="config-row">
         <button class="btn btn-ghost" id="exportBtn">Exportar</button>
@@ -993,6 +1205,43 @@
       });
       await saveTargets();
       toast('Metas salvas');
+      renderMetas();
+    });
+
+    document.getElementById('mAddCatBtn').addEventListener('click', async () => {
+      const nameInput = document.getElementById('mNewCatName');
+      const name = nameInput.value.trim();
+      const bucket = document.getElementById('mNewCatBucket').value;
+      if (!name){
+        toast('Dê um nome pra categoria');
+        return;
+      }
+      const dup = Object.keys(state.categories).some(c => c.toLowerCase() === name.toLowerCase());
+      if (dup){
+        toast('Já existe uma categoria com esse nome');
+        return;
+      }
+      state.categories[name] = bucket;
+      await saveCategories();
+      toast('Categoria criada');
+      renderMetas();
+    });
+
+    document.getElementById('mAddAccBtn').addEventListener('click', async () => {
+      const nameInput = document.getElementById('mNewAccName');
+      const name = nameInput.value.trim();
+      if (!name){
+        toast('Dê um nome pra conta');
+        return;
+      }
+      const dup = state.accounts.some(a => a.toLowerCase() === name.toLowerCase());
+      if (dup){
+        toast('Já existe uma conta com esse nome');
+        return;
+      }
+      state.accounts.push(name);
+      await saveAccounts();
+      toast('Conta criada');
       renderMetas();
     });
 
@@ -1013,7 +1262,7 @@
     }
 
     document.getElementById('exportBtn').addEventListener('click', () => {
-      const data = JSON.stringify({transactions: state.transactions, targets: state.targets, categories: state.categories}, null, 2);
+      const data = JSON.stringify({transactions: state.transactions, targets: state.targets, categories: state.categories, accounts: state.accounts}, null, 2);
       const blob = new Blob([data], {type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1047,6 +1296,10 @@
         if (data.categories){
           state.categories = data.categories;
           await saveCategories();
+        }
+        if (Array.isArray(data.accounts)){
+          state.accounts = data.accounts;
+          await saveAccounts();
         }
         toast('Dados importados');
         renderAll();
@@ -1172,6 +1425,104 @@
     }
   });
 
+  /* ---------------- metas: gerenciar categorias / contas ---------------- */
+  document.getElementById('view-metas').addEventListener('click', async (e) => {
+    const catEditBtn = e.target.closest('[data-cat-edit]');
+    if (catEditBtn){
+      state.editingCategoryName = catEditBtn.getAttribute('data-cat-edit');
+      renderMetas();
+      return;
+    }
+    const catEditCancel = e.target.closest('[data-cat-edit-cancel]');
+    if (catEditCancel){
+      state.editingCategoryName = null;
+      renderMetas();
+      return;
+    }
+    const catEditSave = e.target.closest('[data-cat-edit-save]');
+    if (catEditSave){
+      const orig = catEditSave.getAttribute('data-cat-edit-save');
+      const row = catEditSave.closest('.manage-edit-row');
+      const newName = row.querySelector('.cat-edit-name').value.trim();
+      const newBucket = row.querySelector('.cat-edit-bucket').value;
+      if (!newName){
+        toast('Dê um nome pra categoria');
+        return;
+      }
+      const dup = Object.keys(state.categories).some(c => c.toLowerCase() === newName.toLowerCase() && c !== orig);
+      if (dup){
+        toast('Já existe uma categoria com esse nome');
+        return;
+      }
+      renameCategory(orig, newName, newBucket);
+      await saveCategories();
+      await saveTxns();
+      state.editingCategoryName = null;
+      toast('Categoria atualizada');
+      renderAll();
+      return;
+    }
+    const catDelBtn = e.target.closest('[data-cat-del]');
+    if (catDelBtn){
+      const name = catDelBtn.getAttribute('data-cat-del');
+      const uses = categoryInUseCount(name);
+      const note = uses > 0 ? ` ${uses} lançamento(s) já usam essa categoria e vão manter o nome no histórico.` : '';
+      if (!confirm(`Excluir a categoria "${name}"?${note}`)) return;
+      deleteCategoryByName(name);
+      await saveCategories();
+      toast('Categoria excluída');
+      renderMetas();
+      return;
+    }
+
+    const accEditBtn = e.target.closest('[data-acc-edit]');
+    if (accEditBtn){
+      state.editingAccountName = accEditBtn.getAttribute('data-acc-edit');
+      renderMetas();
+      return;
+    }
+    const accEditCancel = e.target.closest('[data-acc-edit-cancel]');
+    if (accEditCancel){
+      state.editingAccountName = null;
+      renderMetas();
+      return;
+    }
+    const accEditSave = e.target.closest('[data-acc-edit-save]');
+    if (accEditSave){
+      const orig = accEditSave.getAttribute('data-acc-edit-save');
+      const row = accEditSave.closest('.manage-edit-row');
+      const newName = row.querySelector('.acc-edit-name').value.trim();
+      if (!newName){
+        toast('Dê um nome pra conta');
+        return;
+      }
+      const dup = state.accounts.some(a => a.toLowerCase() === newName.toLowerCase() && a !== orig);
+      if (dup){
+        toast('Já existe uma conta com esse nome');
+        return;
+      }
+      renameAccountByName(orig, newName);
+      await saveAccounts();
+      await saveTxns();
+      state.editingAccountName = null;
+      toast('Conta atualizada');
+      renderAll();
+      return;
+    }
+    const accDelBtn = e.target.closest('[data-acc-del]');
+    if (accDelBtn){
+      const name = accDelBtn.getAttribute('data-acc-del');
+      const uses = accountInUseCount(name);
+      const note = uses > 0 ? ` ${uses} lançamento(s) já usam essa conta e vão manter o nome no histórico.` : '';
+      if (!confirm(`Excluir a conta "${name}"?${note}`)) return;
+      deleteAccountByName(name);
+      await saveAccounts();
+      toast('Conta excluída');
+      renderMetas();
+      return;
+    }
+  });
+
   /* ---------------- add-transaction sheet ---------------- */
   const sheet = document.getElementById('sheet');
   const backdrop = document.getElementById('backdrop');
@@ -1209,6 +1560,36 @@
     document.getElementById('fNewCatName').value = '';
     populateCategorySelect(name);
     toast('Categoria criada');
+  });
+
+  function populateAccountSelect(selectValue){
+    const sel = document.getElementById('fAccount');
+    let html = `<option value="">— Nenhuma —</option>`;
+    html += state.accounts.map(a => `<option value="${escapeHtml(a)}">${escapeHtml(a)}</option>`).join('');
+    html += `<option value="__new__">+ Nova conta…</option>`;
+    sel.innerHTML = html;
+    sel.value = (selectValue && state.accounts.includes(selectValue)) ? selectValue : (selectValue === '__new__' ? '__new__' : '');
+    document.getElementById('accAddRow').style.display = sel.value === '__new__' ? 'block' : 'none';
+  }
+
+  document.getElementById('fAccount').addEventListener('change', (e) => {
+    document.getElementById('accAddRow').style.display = e.target.value === '__new__' ? 'block' : 'none';
+  });
+
+  document.getElementById('addAccBtn').addEventListener('click', async () => {
+    const name = document.getElementById('fNewAccName').value.trim();
+    if (!name){
+      toast('Dê um nome pra conta');
+      return;
+    }
+    const dup = state.accounts.some(a => a.toLowerCase() === name.toLowerCase());
+    if (!dup){
+      state.accounts.push(name);
+      await saveAccounts();
+    }
+    document.getElementById('fNewAccName').value = '';
+    populateAccountSelect(name);
+    toast(dup ? 'Conta selecionada' : 'Conta criada');
   });
 
   function setFormType(type){
@@ -1261,14 +1642,16 @@
     document.getElementById('fAmount').value = txn ? txn.amount : '';
     document.getElementById('fDesc').value = txn ? (txn.description || '') : '';
     document.getElementById('fDate').value = txn ? txn.date : todayISO();
-    document.getElementById('fAccount').value = txn ? (txn.account || '') : '';
     document.getElementById('fInstallments').value = 1;
     document.getElementById('fRecurringMonths').value = 12;
     document.getElementById('creditExtra').style.display = 'none';
     document.getElementById('catAddRow').style.display = 'none';
+    document.getElementById('accAddRow').style.display = 'none';
+    document.getElementById('fNewAccName').value = '';
     document.getElementById('recurringExtra').style.display = 'none';
     recurringSwitch.classList.remove('on');
     document.getElementById('fDateLabel').textContent = 'Data';
+    populateAccountSelect(txn ? (txn.account || '') : '');
 
     if (txn && txn.essential){ essSwitch.classList.add('on'); } else if (txn){ essSwitch.classList.remove('on'); } else { essSwitch.classList.add('on'); }
 
@@ -1296,7 +1679,7 @@
     const date = document.getElementById('fDate').value || todayISO();
     const description = document.getElementById('fDesc').value.trim();
     const category = document.getElementById('fCategory').value;
-    const account = document.getElementById('fAccount').value.trim();
+    const account = document.getElementById('fAccount').value;
     const essential = essSwitch.classList.contains('on');
 
     if (!amount || amount <= 0){
@@ -1305,6 +1688,10 @@
     }
     if (category === '__new__'){
       toast('Preencha e adicione a categoria nova primeiro');
+      return;
+    }
+    if (account === '__new__'){
+      toast('Preencha e adicione a conta nova primeiro');
       return;
     }
 
