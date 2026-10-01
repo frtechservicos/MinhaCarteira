@@ -132,6 +132,23 @@
   .saldo-sub .v.income{color:var(--income);}
   .saldo-sub .v.expense{color:var(--expense);}
 
+  .invested-card{
+    background:var(--surface);
+    border:1px solid var(--accent-dim);
+    border-radius:var(--radius-m);
+    padding:16px 20px;
+    margin-bottom:18px;
+  }
+  .invested-card .eyebrow{font-size:12px; color:var(--text-muted); margin:0 0 4px;}
+  .invested-value{
+    font-size:23px;
+    font-weight:600;
+    color:var(--accent);
+    margin:0 0 6px;
+    line-height:1.1;
+  }
+  .invested-note{font-size:11.5px; color:var(--text-muted); margin:0; line-height:1.4;}
+
   .essential-row{
     display:flex;
     gap:10px;
@@ -236,6 +253,8 @@
   }
   .txn .amt.income{color:var(--income);}
   .txn .amt.expense{color:var(--expense);}
+  .txn .amt.invested{color:var(--accent);}
+  .invest-tag{color:var(--accent); font-weight:600;}
   .txn .del{
     flex:none;
     width:28px; height:28px;
@@ -316,7 +335,7 @@
     text-overflow:ellipsis;
     white-space:nowrap;
   }
-  .manage-row .bucket-tag{
+  .manage-row .bucket-tag, .bucket-tag{
     flex:none;
     font-size:10px;
     color:var(--text-muted);
@@ -378,6 +397,78 @@
   }
   .manage-add-row .btn{width:100%; margin-top:0;}
 
+  /* ---------- Investimentos ---------- */
+  .period-pills{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    margin-bottom:18px;
+    padding-bottom:2px;
+  }
+  .period-pills::-webkit-scrollbar{display:none;}
+  .period-pill{
+    flex:none;
+    background:var(--surface);
+    border:1px solid var(--border);
+    color:var(--text-muted);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:12.5px;
+    padding:7px 14px;
+    border-radius:999px;
+  }
+  .period-pill.active{
+    background:var(--accent);
+    border-color:var(--accent);
+    color:#1B1400;
+    font-weight:600;
+  }
+  .osc-badge{
+    display:inline-flex;
+    align-items:center;
+    font-size:12.5px;
+    font-weight:600;
+    padding:4px 10px;
+    border-radius:999px;
+    white-space:nowrap;
+  }
+  .osc-badge.up{color:var(--income); background:var(--income-dim);}
+  .osc-badge.down{color:var(--expense); background:var(--expense-dim);}
+  .osc-badge.neutral{color:var(--text-muted); background:var(--surface-2);}
+  .position-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:var(--radius-s);
+    padding:14px;
+    margin-bottom:10px;
+  }
+  .hist-toggle{
+    background:none;
+    border:none;
+    color:var(--accent);
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:12px;
+    padding:8px 0 0;
+    text-align:left;
+  }
+  .position-history{
+    margin-top:8px;
+    border-top:1px solid var(--border);
+    padding-top:8px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+  }
+  .history-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:12.5px;
+  }
+  .history-row .hd{color:var(--text-muted); flex:1;}
+  .history-row .hv{font-weight:500;}
+  .history-row .icon-btn{width:26px; height:26px; flex:none;}
+  .history-row .icon-btn svg{width:12px; height:12px;}
+
   /* ---------- Projeção ---------- */
   .proj-row{
     display:flex;
@@ -397,141 +488,6 @@
   .proj-row .pv .delta{font-size:11px; color:var(--text-muted); margin-top:2px;}
   .proj-note{font-size:12.5px; color:var(--text-muted); margin:-6px 0 18px; line-height:1.5;}
 
-  /* ---------- Investimentos ---------- */
-  .invest-total-card{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius-m);
-    padding:22px 20px;
-    margin-bottom:22px;
-  }
-  .invest-total-card .eyebrow{font-size:12px; color:var(--text-muted); margin:0 0 4px;}
-  .invest-total-value{font-family:'Fraunces', serif; font-size:30px; font-weight:600; margin:0 0 14px; line-height:1.1;}
-  .invest-total-sub{display:flex; gap:14px; padding-bottom:14px; margin-bottom:14px; border-bottom:1px solid var(--border);}
-  .invest-total-sub div{flex:1;}
-  .invest-total-sub .k{font-size:10.5px; color:var(--text-muted); margin:0 0 3px;}
-  .invest-total-sub .v{font-size:13.5px; margin:0; font-weight:500; font-family:'Fraunces',serif;}
-
-  .osc-grid{display:flex; flex-wrap:wrap; gap:8px;}
-  .osc-chip{flex:1 1 calc(33.333% - 6px); min-width:84px; background:var(--surface-2); border-radius:var(--radius-s); padding:8px 10px;}
-  .osc-chip .k{font-size:9.5px; color:var(--text-muted); margin:0 0 3px; text-transform:uppercase; letter-spacing:.3px;}
-  .osc-chip .v{font-size:13px; font-weight:500; margin:0; font-family:'Fraunces',serif;}
-  .osc-chip .v.pos{color:var(--income);}
-  .osc-chip .v.neg{color:var(--expense);}
-  .osc-chip .v.na{color:var(--text-muted); font-family:'IBM Plex Sans',sans-serif; font-size:11.5px;}
-
-  .invest-cat-block{margin-bottom:26px;}
-  .invest-cat-header{
-    display:flex; justify-content:space-between; align-items:baseline;
-    margin-bottom:10px;
-  }
-  .invest-cat-header .name{font-size:14px; font-weight:600;}
-  .invest-cat-header .total{font-family:'Fraunces', serif; font-size:15px;}
-  .invest-cat-empty{font-size:12.5px; color:var(--text-muted); padding:2px 0 6px;}
-
-  .invest-position{
-    background:var(--surface);
-    border:1px solid var(--border);
-    border-radius:var(--radius-s);
-    margin-bottom:10px;
-    overflow:hidden;
-  }
-  .invest-position-row{
-    display:flex; align-items:center; gap:10px;
-    padding:13px 14px;
-    cursor:pointer;
-  }
-  .invest-position-row:active{background:var(--surface-2);}
-  .invest-position-row .info{flex:1; min-width:0;}
-  .invest-position-row .info .nm{font-size:13.5px; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .invest-position-row .info .sub{font-size:11px; color:var(--text-muted); margin-top:2px;}
-  .invest-position-row .val{text-align:right; flex:none;}
-  .invest-position-row .val .amt{font-family:'Fraunces', serif; font-size:14.5px;}
-  .invest-position-row .val .chip{font-size:11px; margin-top:2px;}
-  .invest-position-row .val .chip.pos{color:var(--income);}
-  .invest-position-row .val .chip.neg{color:var(--expense);}
-  .invest-position-row .val .chip.na{color:var(--text-muted);}
-  .invest-position-row .chevron{flex:none; color:var(--text-muted); transition:transform .2s ease;}
-  .invest-position.open .chevron{transform:rotate(180deg);}
-
-  .invest-position-detail{
-    padding:2px 14px 16px;
-    border-top:1px solid var(--border);
-  }
-  .invest-position-detail .detail-title{font-size:11px; color:var(--text-muted); margin:14px 0 8px; text-transform:uppercase; letter-spacing:.3px;}
-  .invest-position-detail .actions-row{display:flex; gap:8px; margin-top:14px;}
-  .invest-position-detail .actions-row .btn{flex:1; margin-top:0;}
-  .invest-history-list{display:flex; flex-direction:column; gap:0;}
-  .invest-history-item{
-    display:flex; justify-content:space-between; align-items:center;
-    font-size:12.5px; padding:7px 0; border-bottom:1px solid var(--border);
-  }
-  .invest-history-item:last-child{border-bottom:none;}
-  .invest-history-item .d{color:var(--text-muted);}
-  .invest-history-item .v{font-family:'Fraunces', serif;}
-  .invest-history-item .del-h{background:none;border:none;color:var(--text-muted);font-size:15px;flex:none;padding:2px 8px;}
-  .invest-add-snap{
-    display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;
-    padding:12px; background:var(--surface-2); border:1px dashed var(--border); border-radius:var(--radius-s);
-  }
-  .invest-add-snap input{
-    flex:1; min-width:110px;
-    background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-s);
-    color:var(--text); font-size:14px; padding:10px; font-family:'IBM Plex Sans',sans-serif;
-  }
-  .invest-add-snap .btn{width:100%; margin-top:2px;}
-  .invest-edit-row{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px;}
-  .invest-edit-row input, .invest-edit-row select{
-    flex:1; min-width:110px;
-    background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-s);
-    color:var(--text); font-size:14px; padding:10px; font-family:'IBM Plex Sans',sans-serif;
-  }
-  .invest-edit-row .edit-actions{display:flex; gap:8px; width:100%;}
-  .invest-edit-row .edit-actions .btn{flex:1; margin-top:0;}
-  .invest-edit-row .field-full{width:100%;}
-  .invest-edit-row .field-full label{display:block; font-size:11px; color:var(--text-muted); margin-bottom:4px;}
-
-  .invest-cash-card{
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    border-radius:var(--radius-m);
-    padding:16px 18px;
-    margin-bottom:16px;
-    display:flex; justify-content:space-between; align-items:center;
-  }
-  .invest-cash-card .k{font-size:12px; color:var(--text-muted); margin:0 0 4px;}
-  .invest-cash-card .v{font-family:'Fraunces', serif; font-size:18px; margin:0;}
-
-  .invest-pm-line{font-size:11px; color:var(--text-muted); margin-top:2px;}
-  .invest-gain-line{font-size:12px; margin-top:2px;}
-  .invest-gain-line.pos{color:var(--income);}
-  .invest-gain-line.neg{color:var(--expense);}
-
-  .invest-status-badge{
-    display:inline-block; font-size:10px; padding:2px 8px; border-radius:999px;
-    background:var(--surface-2); color:var(--text-muted); margin-left:6px; vertical-align:middle;
-  }
-  .invest-maturity-line{font-size:11px; color:var(--text-muted); margin-top:2px;}
-  .invest-maturity-banner{
-    font-size:12px; background:var(--expense-dim); color:var(--expense);
-    border-radius:var(--radius-s); padding:10px 12px; margin:10px 0;
-  }
-
-  /* segmented control (vencimento indefinido/definido) */
-  .seg{display:flex; background:var(--surface-2); border-radius:var(--radius-s); padding:4px; gap:2px;}
-  .seg-btn{flex:1; padding:9px 4px; border:none; background:none; color:var(--text-muted); border-radius:6px; font-size:12.5px; font-weight:500; font-family:'IBM Plex Sans', sans-serif;}
-  .seg-btn.active{background:var(--accent-dim); color:var(--accent);}
-
-  .sheet-sub{font-size:12.5px; color:var(--text-muted); margin:-12px 0 16px;}
-  .redeem-preview{
-    background:var(--surface-2); border:1px solid var(--border); border-radius:var(--radius-s);
-    padding:12px 14px; margin:4px 0 10px; font-size:13px; display:flex; flex-direction:column; gap:6px;
-  }
-  .redeem-preview .row{display:flex; justify-content:space-between;}
-  .redeem-preview .row .k{color:var(--text-muted);}
-  .redeem-preview .row.total .v{font-family:'Fraunces', serif; font-size:15px;}
-  .redeem-note{font-size:11.5px; color:var(--text-muted); line-height:1.5; margin:0 0 16px;}
-
   /* ---------- Tab bar ---------- */
   nav.tabbar{
     position:fixed;
@@ -542,22 +498,23 @@
     backdrop-filter:blur(14px);
     -webkit-backdrop-filter:blur(14px);
     border-top:1px solid var(--border);
-    padding:8px 12px calc(8px + var(--safe-bottom));
+    padding:8px 6px calc(8px + var(--safe-bottom));
     display:flex;
-    justify-content:space-around;
+    justify-content:space-between;
   }
   nav.tabbar button{
     background:none; border:none;
     color:var(--text-muted);
     font-family:'IBM Plex Sans', sans-serif;
     font-size:10.5px;
-    display:flex; flex-direction:column; align-items:center; gap:4px;
-    padding:6px 6px;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    padding:6px 2px;
     border-radius:10px;
     flex:1;
+    min-width:0;
   }
   nav.tabbar button.active{color:var(--accent);}
-  nav.tabbar button svg{width:20px; height:20px;}
+  nav.tabbar button svg{width:19px; height:19px; flex:none;}
 
   .fab{
     position:fixed;
@@ -777,7 +734,7 @@
     <section class="view" id="view-projecao"></section>
     <!-- INVESTIMENTOS -->
     <section class="view" id="view-investimentos"></section>
-    <!-- METAS -->
+    <!-- METAS / AJUSTES -->
     <section class="view" id="view-metas"></section>
   </main>
 
@@ -797,11 +754,11 @@
       Projeção
     </button>
     <button data-tab="investimentos">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2 2 7l10 5 10-5-10-5Z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
-      Investir
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+      Invest.
     </button>
     <button data-tab="metas">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.05.05a2 2 0 1 1-2.82 2.82l-.05-.05a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.05.05a2 2 0 1 1-2.82-2.82l.05-.05a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.05-.05a2 2 0 1 1 2.82-2.82l.05.05a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.05-.05a2 2 0 1 1 2.82 2.82l-.05.05a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       Ajustes
     </button>
   </nav>
@@ -820,7 +777,7 @@
       <label for="fAmount">Valor</label>
       <div class="field-amount">
         <span>R$</span>
-        <input type="number" inputmode="decimal" step="0.01" min="0" id="fAmount" placeholder="0,00">
+        <input type="text" inputmode="decimal" id="fAmount" placeholder="0,00">
       </div>
     </div>
 
@@ -900,121 +857,14 @@
       <div class="switch" id="fEssential"><div class="knob"></div></div>
     </div>
 
+    <div class="check-row" id="investmentRow">
+      <label for="fInvestment">É investimento/poupança</label>
+      <div class="switch" id="fInvestment"><div class="knob"></div></div>
+    </div>
+    <p id="investmentHint" style="font-size:11.5px; color:var(--text-muted); margin:-10px 0 16px; line-height:1.4;">Esse valor não entra no saldo do mês — fica separado, como dinheiro guardado/investido.</p>
+
     <button class="btn btn-primary" id="saveBtn">Salvar lançamento</button>
     <button class="btn btn-ghost" id="cancelBtn">Cancelar</button>
-  </div>
-
-  <div class="sheet-backdrop" id="investBackdrop"></div>
-  <div class="sheet" id="investSheet">
-    <div class="sheet-handle"></div>
-    <h2>Nova posição</h2>
-
-    <div class="field">
-      <label for="fInvName">Nome</label>
-      <input type="text" id="fInvName" placeholder="Ex: Tesouro Selic, Ações XPTO…">
-    </div>
-
-    <div class="field">
-      <label for="fInvCategory">Tipo</label>
-      <select id="fInvCategory"></select>
-    </div>
-
-    <div class="field" id="fInvMaturityWrap" style="display:none;">
-      <label>Vencimento (Renda Fixa)</label>
-      <div class="seg" id="fInvMaturityType">
-        <button type="button" class="seg-btn active" data-val="indefinido">Indefinido</button>
-        <button type="button" class="seg-btn" data-val="definido">Data definida</button>
-      </div>
-      <input type="date" id="fInvMaturityDate" style="display:none; margin-top:8px;">
-    </div>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="fInvDate">Data do aporte</label>
-        <input type="date" id="fInvDate">
-      </div>
-      <div class="field">
-        <label for="fInvValue">Valor aportado</label>
-        <div class="field-amount">
-          <span>R$</span>
-          <input type="number" inputmode="decimal" step="0.01" min="0" id="fInvValue" placeholder="0,00">
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="fInvQty">Quantidade (opcional — cotas/ações, pra calcular PM)</label>
-      <input type="number" inputmode="decimal" step="0.000001" min="0" id="fInvQty" placeholder="Deixe em branco se não se aplica">
-    </div>
-
-    <button class="btn btn-primary" id="saveInvestBtn">Salvar posição</button>
-    <button class="btn btn-ghost" id="cancelInvestBtn">Cancelar</button>
-  </div>
-
-  <div class="sheet-backdrop" id="lotBackdrop"></div>
-  <div class="sheet" id="lotSheet">
-    <div class="sheet-handle"></div>
-    <h2>Aumentar posição</h2>
-    <p class="sheet-sub" id="lotPositionName"></p>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="fLotDate">Data</label>
-        <input type="date" id="fLotDate">
-      </div>
-      <div class="field">
-        <label for="fLotValue">Valor aportado</label>
-        <div class="field-amount">
-          <span>R$</span>
-          <input type="number" inputmode="decimal" step="0.01" min="0" id="fLotValue" placeholder="0,00">
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="fLotQty">Quantidade (opcional)</label>
-      <input type="number" inputmode="decimal" step="0.000001" min="0" id="fLotQty" placeholder="Deixe em branco se não se aplica">
-    </div>
-
-    <div class="check-row">
-      <label for="fLotFromBalance">Descontar do saldo livre (<span id="lotBalanceHint">R$ 0,00</span> disp.)</label>
-      <div class="switch" id="fLotFromBalance"><div class="knob"></div></div>
-    </div>
-
-    <button class="btn btn-primary" id="saveLotBtn">Confirmar aporte</button>
-    <button class="btn btn-ghost" id="cancelLotBtn">Cancelar</button>
-  </div>
-
-  <div class="sheet-backdrop" id="redeemBackdrop"></div>
-  <div class="sheet" id="redeemSheet">
-    <div class="sheet-handle"></div>
-    <h2>Desfazer posição</h2>
-    <p class="sheet-sub" id="redeemPositionName"></p>
-
-    <div class="field-row">
-      <div class="field">
-        <label for="fRedeemDate">Data</label>
-        <input type="date" id="fRedeemDate">
-      </div>
-      <div class="field">
-        <label for="fRedeemValue">Valor a resgatar</label>
-        <div class="field-amount">
-          <span>R$</span>
-          <input type="number" inputmode="decimal" step="0.01" min="0" id="fRedeemValue" placeholder="0,00">
-        </div>
-      </div>
-    </div>
-
-    <div class="field">
-      <label for="fRedeemRate">Alíquota de IR sugerida (%) — ajuste se souber que é diferente</label>
-      <input type="number" inputmode="decimal" step="0.1" min="0" max="100" id="fRedeemRate">
-    </div>
-
-    <div class="redeem-preview" id="redeemPreview"></div>
-    <p class="redeem-note" id="redeemNote"></p>
-
-    <button class="btn btn-primary" id="saveRedeemBtn">Confirmar resgate</button>
-    <button class="btn btn-ghost" id="cancelRedeemBtn">Cancelar</button>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -1058,8 +908,7 @@
   const TARGET_KEY = 'fluxo_budget_targets';
   const CATEGORY_KEY = 'fluxo_categories';
   const ACCOUNT_KEY = 'fluxo_accounts';
-  const INVEST_KEY = 'fluxo_investments';
-  const INVEST_CASH_KEY = 'fluxo_invest_cash_balance';
+  const INVESTMENT_KEY = 'fluxo_investments';
 
   const DEFAULT_TARGETS = {
     'FIXA': 40, 'LAZER': 10, 'PRAZERES': 10, 'CONFORTO': 5,
@@ -1086,19 +935,20 @@
   // Contas usadas para marcar de onde saiu/entrou o dinheiro
   const DEFAULT_ACCOUNTS = ['NuConta', 'C6', 'XP', 'BTG', 'PORTO', 'VA', 'VR', 'Caju', 'Dinheiro'];
 
-  // Categorias de investimento e períodos de oscilação acompanhados
-  const INVEST_CATEGORIES = ['Renda Fixa', 'Renda Variável', 'Reserva de Emergência'];
-  const OSC_PERIODS = [
-    { key: 'dia', label: 'Diária', calc: (iso) => addDaysISO(iso, -1) },
-    { key: 'semana', label: 'Semanal', calc: (iso) => addDaysISO(iso, -7) },
-    { key: 'mes', label: 'Mensal', calc: (iso) => addMonths(iso, -1) },
-    { key: 'trimestre', label: 'Trimestral', calc: (iso) => addMonths(iso, -3) },
-    { key: 'semestre', label: 'Semestral', calc: (iso) => addMonths(iso, -6) },
-    { key: 'ano', label: 'Anual', calc: (iso) => addMonths(iso, -12) }
-  ];
-
   const ICON_EDIT = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
   const ICON_DEL = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>`;
+
+  // Investimentos: categorias e janelas de tempo pra oscilação em %
+  const INVESTMENT_CATEGORIES = ['Renda Fixa', 'Renda Variável', 'Reserva de Emergência'];
+  const OSC_PERIODS = [
+    { key: 'dia', label: 'Dia' },
+    { key: 'semana', label: 'Semana' },
+    { key: 'mes', label: 'Mês' },
+    { key: 'trimestre', label: 'Trimestre' },
+    { key: 'semestre', label: 'Semestre' },
+    { key: 'ano', label: 'Ano' },
+    { key: 'inicio', label: 'Início' }
+  ];
 
   // Lançamentos futuros importados da planilha (Setembro/2026 em diante),
   // usados para semear o app na primeira vez que ele roda (não sobrescreve
@@ -1111,7 +961,6 @@
     categories: {...DEFAULT_CATEGORIES},
     accounts: [...DEFAULT_ACCOUNTS],
     investments: [],
-    investCashBalance: 0,
     currentMonth: new Date(),
     activeTab: 'resumo',
     formType: 'despesa',
@@ -1119,13 +968,34 @@
     editingId: null,
     editingCategoryName: null,
     editingAccountName: null,
-    expandedInvestmentId: null,
+    investPeriod: 'mes',
     editingInvestmentId: null,
-    redeemPositionId: null,
-    lotPositionId: null
+    updatingInvestmentId: null,
+    expandedInvestmentId: null,
+    showAddInvestment: false
   };
 
   const fmtBRL = (n) => new Intl.NumberFormat('pt-BR', {style:'currency', currency:'BRL'}).format(n || 0);
+  // Aceita valores digitados com vírgula OU ponto como separador decimal
+  // (o teclado numérico do Android costuma mostrar vírgula, que o <input type="number"> nativo rejeita).
+  function parseDecimal(input){
+    if (input === null || input === undefined) return NaN;
+    let str = String(input).trim();
+    if (str === '') return NaN;
+    const hasComma = str.includes(',');
+    const hasDot = str.includes('.');
+    if (hasComma && hasDot){
+      // o separador que aparece por último é o decimal; o outro é separador de milhar e é descartado
+      if (str.lastIndexOf(',') > str.lastIndexOf('.')){
+        str = str.replace(/\./g, '').replace(',', '.');
+      } else {
+        str = str.replace(/,/g, '');
+      }
+    } else if (hasComma){
+      str = str.replace(',', '.');
+    }
+    return Number(str);
+  }
   const monthKey = (d) => d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
   const monthLabel = (d) => {
     const s = d.toLocaleDateString('pt-BR', {month:'long', year:'numeric'});
@@ -1143,13 +1013,85 @@
     const dt = new Date(y, targetMonthIndex, safeDay);
     return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
   };
-  const addDaysISO = (isoDate, n) => {
+  const addDays = (isoDate, n) => {
     const [y,m,d] = isoDate.split('-').map(Number);
-    const dt = new Date(y, m-1, d);
-    dt.setDate(dt.getDate() + n);
+    const dt = new Date(y, m-1, d + n);
     return dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0');
   };
-  const fmtPct = (n) => (n >= 0 ? '+' : '') + n.toFixed(2).replace('.', ',') + '%';
+  const fmtDateBR = (iso) => {
+    if (!iso) return '—';
+    const [y,m,d] = iso.split('-');
+    return `${d}/${m}/${y}`;
+  };
+
+  /* ---------------- investimentos: matemática de oscilação ---------------- */
+  function periodRefDate(latestDate, periodKey){
+    if (periodKey === 'dia') return addDays(latestDate, -1);
+    if (periodKey === 'semana') return addDays(latestDate, -7);
+    if (periodKey === 'mes') return addMonths(latestDate, -1);
+    if (periodKey === 'trimestre') return addMonths(latestDate, -3);
+    if (periodKey === 'semestre') return addMonths(latestDate, -6);
+    if (periodKey === 'ano') return addMonths(latestDate, -12);
+    return null; // 'inicio' é tratado à parte
+  }
+  function sortHistory(history){
+    return [...(history || [])].sort((a, b) => a.date < b.date ? -1 : (a.date > b.date ? 1 : 0));
+  }
+  function valueAsOf(history, targetDate){
+    let val = null;
+    for (const h of sortHistory(history)){
+      if (h.date <= targetDate) val = h.value; else break;
+    }
+    return val;
+  }
+  function pctChange(current, past){
+    if (past === null || past === undefined || past === 0) return null;
+    return ((current - past) / past) * 100;
+  }
+  function positionOscillation(position, periodKey){
+    const hist = sortHistory(position.history);
+    if (!hist.length) return null;
+    const latest = hist[hist.length - 1];
+    let past;
+    if (periodKey === 'inicio'){
+      if (hist.length < 2) return null;
+      past = hist[0].value;
+    } else {
+      past = valueAsOf(hist, periodRefDate(latest.date, periodKey));
+    }
+    return pctChange(latest.value, past);
+  }
+  function investmentsByCategory(category){
+    return state.investments.filter(p => !category || p.category === category);
+  }
+  function groupCurrentTotal(positions){
+    return positions.reduce((sum, p) => {
+      const hist = sortHistory(p.history);
+      return sum + (hist.length ? hist[hist.length - 1].value : 0);
+    }, 0);
+  }
+  function groupOscillation(positions, periodKey){
+    const withHist = positions.filter(p => p.history && p.history.length);
+    if (!withHist.length) return null;
+    let currentTotal = 0, pastTotal = 0;
+    withHist.forEach(p => {
+      const hist = sortHistory(p.history);
+      const latest = hist[hist.length - 1];
+      currentTotal += latest.value;
+      const refDate = periodKey === 'inicio' ? hist[0].date : periodRefDate(latest.date, periodKey);
+      const past = valueAsOf(hist, refDate);
+      if (past !== null) pastTotal += past;
+    });
+    return pctChange(currentTotal, pastTotal);
+  }
+  function oscBadgeHtml(pct){
+    if (pct === null || pct === undefined || Number.isNaN(pct)){
+      return `<span class="osc-badge neutral">—</span>`;
+    }
+    const sign = pct > 0 ? '+' : '';
+    const cls = pct > 0 ? 'up' : (pct < 0 ? 'down' : 'neutral');
+    return `<span class="osc-badge ${cls}">${sign}${pct.toFixed(2)}%</span>`;
+  }
 
   function toast(msg){
     const t = document.getElementById('toast');
@@ -1165,14 +1107,11 @@
     const targets = await Storage.get(TARGET_KEY);
     const categories = await Storage.get(CATEGORY_KEY);
     const accounts = await Storage.get(ACCOUNT_KEY);
-    const investments = await Storage.get(INVEST_KEY);
-    const investCash = await Storage.get(INVEST_CASH_KEY);
+    const investments = await Storage.get(INVESTMENT_KEY);
     state.targets = targets && typeof targets === 'object' ? targets : {...DEFAULT_TARGETS};
     state.categories = categories && typeof categories === 'object' ? categories : {...DEFAULT_CATEGORIES};
     state.accounts = Array.isArray(accounts) ? accounts : [...DEFAULT_ACCOUNTS];
     state.investments = Array.isArray(investments) ? investments : [];
-    state.investCashBalance = typeof investCash === 'number' ? investCash : 0;
-    const maturedCount = await processMaturedFixedIncome();
     if (Array.isArray(txns)){
       // já existe uma chave salva (mesmo vazia, ex: depois de "Apagar tudo") — respeita como está
       state.transactions = txns;
@@ -1191,14 +1130,12 @@
       }
     });
     if (accountsChanged) await saveAccounts();
-    return maturedCount;
   }
   async function saveTxns(){ await Storage.set(TXN_KEY, state.transactions); }
   async function saveTargets(){ await Storage.set(TARGET_KEY, state.targets); }
   async function saveCategories(){ await Storage.set(CATEGORY_KEY, state.categories); }
   async function saveAccounts(){ await Storage.set(ACCOUNT_KEY, state.accounts); }
-  async function saveInvestments(){ await Storage.set(INVEST_KEY, state.investments); }
-  async function saveInvestCashBalance(){ await Storage.set(INVEST_CASH_KEY, state.investCashBalance); }
+  async function saveInvestments(){ await Storage.set(INVESTMENT_KEY, state.investments); }
 
   /* ---------------- categorias / contas: renomear, excluir, contar uso ---------------- */
   function categoryInUseCount(name){
@@ -1240,12 +1177,15 @@
 
   function monthTotals(mk){
     const list = txnsForMonth(mk);
-    let income = 0, expense = 0, essential = 0, nonEssential = 0;
+    let income = 0, expense = 0, essential = 0, nonEssential = 0, invested = 0;
     const byBucket = {};
     BUCKETS.forEach(c => byBucket[c] = 0);
     list.forEach(t => {
       if (t.type === 'receita'){
         income += t.amount;
+      } else if (t.investment){
+        // dinheiro direcionado pra investimento/poupança: não conta como gasto nem entra no orçamento por categoria
+        invested += t.amount;
       } else {
         expense += t.amount;
         const bucket = t.bucket || state.categories[t.category] || 'CONFORTO';
@@ -1253,248 +1193,7 @@
         if (t.essential) essential += t.amount; else nonEssential += t.amount;
       }
     });
-    return { income, expense, saldo: income - expense, byBucket, essential, nonEssential };
-  }
-
-  /* ---------------- investimentos: cálculos ---------------- */
-  // Cada posição guarda uma linha do tempo de eventos: aporte (compra/aumento),
-  // mark (atualização de valor de mercado) e resgate (venda parcial ou total).
-  // O valor/quantidade/custo "atuais" são sempre recalculados a partir dela (replay),
-  // nunca guardados soltos — isso evita inconsistência entre valor, PM e histórico.
-
-  const MS_DAY = 86400000;
-  function dateToNum(iso){
-    const [y,m,d] = iso.split('-').map(Number);
-    return Date.UTC(y, m-1, d) / MS_DAY;
-  }
-  function fmtDateBR(iso){
-    return new Date(iso + 'T00:00:00').toLocaleDateString('pt-BR');
-  }
-
-  // Tabela regressiva do IR para renda fixa (dias corridos desde o aporte, em média ponderada).
-  function irRegressiveRate(days){
-    if (days <= 180) return 0.225;
-    if (days <= 360) return 0.20;
-    if (days <= 720) return 0.175;
-    return 0.15;
-  }
-
-  function sortedEvents(position, uptoISO){
-    return position.events
-      .filter(e => !uptoISO || e.date <= uptoISO)
-      .slice()
-      .sort((a,b) => a.date.localeCompare(b.date));
-  }
-
-  // "Replay" da posição: processa os eventos em ordem e devolve o estado resultante
-  // (valor atual, custo total investido ainda na posição, quantidade e a soma
-  // ponderada de datas do custo — usada pra estimar a data média de aporte).
-  function replayPosition(position, uptoISO){
-    const events = sortedEvents(position, uptoISO);
-    let value = 0, costBasis = 0, costDateSum = 0, quantity = 0, lastEventDate = null;
-    events.forEach(e => {
-      const dateNum = dateToNum(e.date);
-      if (e.type === 'aporte'){
-        value += e.amount;
-        costBasis += e.amount;
-        costDateSum += e.amount * dateNum;
-        quantity += (e.quantity || 0);
-      } else if (e.type === 'mark'){
-        value = e.value;
-      } else if (e.type === 'resgate'){
-        value -= e.amount;
-        costBasis -= (e.costBasisRemoved || 0);
-        costDateSum -= (e.costDateSumRemoved || 0);
-        quantity -= (e.quantityRemoved || 0);
-      }
-      lastEventDate = e.date;
-    });
-    return {
-      value: Math.max(0, value),
-      costBasis: Math.max(0, costBasis),
-      costDateSum: Math.max(0, costDateSum),
-      quantity: Math.max(0, quantity),
-      lastEventDate
-    };
-  }
-  function valueAtDate(position, targetISO){
-    const st = replayPosition(position, targetISO);
-    if (!st.lastEventDate) return null;
-    return st;
-  }
-  function positionQuantityPM(position){
-    const st = replayPosition(position);
-    if (st.quantity > 0.000001) return { quantity: st.quantity, pm: st.costBasis / st.quantity };
-    return null;
-  }
-  // Soma de aportes menos resgates entre duas datas — usada pra "descontar" o efeito
-  // de dinheiro novo/saída na hora de calcular oscilação (queremos ver só o efeito de mercado).
-  function netCashFlowBetween(position, fromISOExclusive, toISOInclusive){
-    let net = 0;
-    position.events.forEach(e => {
-      if (e.date > fromISOExclusive && e.date <= toISOInclusive){
-        if (e.type === 'aporte') net += e.amount;
-        else if (e.type === 'resgate') net -= e.amount;
-      }
-    });
-    return net;
-  }
-  // Margem de tolerância: só mostramos a oscilação de um período se existir um
-  // registro (aporte/atualização/resgate) razoavelmente perto da data-alvo daquele
-  // período — senão a % fica enganosa (compara com um valor velho demais).
-  function toleranceDays(periodKey){
-    switch(periodKey){
-      case 'dia': return 2;
-      case 'semana': return 10;
-      case 'mes': return 40;
-      case 'trimestre': return 100;
-      case 'semestre': return 200;
-      case 'ano': return 400;
-      default: return Infinity;
-    }
-  }
-  // Oscilação % de uma posição individual, sempre referenciada a hoje, líquida de aportes/resgates no período.
-  function positionOscillations(position){
-    const result = {};
-    const now = replayPosition(position);
-    if (!now.lastEventDate) return result;
-    const today = todayISO();
-    OSC_PERIODS.forEach(p => {
-      const targetISO = p.calc(today);
-      const past = valueAtDate(position, targetISO);
-      if (!past || past.value === 0){ result[p.key] = null; return; }
-      const gap = dateToNum(targetISO) - dateToNum(past.lastEventDate);
-      if (gap > toleranceDays(p.key)){ result[p.key] = null; return; }
-      const netFlow = netCashFlowBetween(position, targetISO, today);
-      result[p.key] = ((now.value - netFlow - past.value) / past.value) * 100;
-    });
-    const first = sortedEvents(position)[0];
-    if (first){
-      const pastIni = valueAtDate(position, first.date);
-      if (pastIni && pastIni.value !== 0){
-        const netFlowIni = netCashFlowBetween(position, first.date, today);
-        result.inicio = ((now.value - netFlowIni - pastIni.value) / pastIni.value) * 100;
-      } else result.inicio = null;
-    } else result.inicio = null;
-    return result;
-  }
-  function positionsByCategory(category){
-    return state.investments.filter(p => p.category === category);
-  }
-  function currentTotal(positions){
-    return positions.reduce((s,p) => s + replayPosition(p).value, 0);
-  }
-  // Oscilação % agregada (categoria ou carteira inteira).
-  function aggregateOscillations(positions){
-    const today = todayISO();
-    const current = currentTotal(positions);
-    const result = { current, osc: {} };
-    OSC_PERIODS.forEach(per => {
-      const targetISO = per.calc(today);
-      let pastSum = 0, netFlowSum = 0, any = false;
-      positions.forEach(p => {
-        const past = valueAtDate(p, targetISO);
-        if (past){
-          const gap = dateToNum(targetISO) - dateToNum(past.lastEventDate);
-          if (gap <= toleranceDays(per.key)){
-            pastSum += past.value;
-            netFlowSum += netCashFlowBetween(p, targetISO, today);
-            any = true;
-          }
-        }
-      });
-      result.osc[per.key] = (any && pastSum !== 0) ? (((current - netFlowSum) - pastSum) / pastSum) * 100 : null;
-    });
-    const firstDates = positions.map(p => { const f = sortedEvents(p)[0]; return f ? f.date : null; }).filter(Boolean);
-    if (firstDates.length){
-      const earliest = firstDates.sort()[0];
-      let pastSum = 0, netFlowSum = 0, any = false;
-      positions.forEach(p => {
-        const past = valueAtDate(p, earliest);
-        if (past){ pastSum += past.value; netFlowSum += netCashFlowBetween(p, earliest, today); any = true; }
-      });
-      result.osc.inicio = (any && pastSum !== 0) ? (((current - netFlowSum) - pastSum) / pastSum) * 100 : null;
-    } else {
-      result.osc.inicio = null;
-    }
-    return result;
-  }
-  function oscChipHtml(label, pct){
-    if (pct === null || pct === undefined || isNaN(pct)){
-      return `<div class="osc-chip"><p class="k">${label}</p><p class="v na">—</p></div>`;
-    }
-    const cls = pct > 0 ? 'pos' : (pct < 0 ? 'neg' : '');
-    return `<div class="osc-chip"><p class="k">${label}</p><p class="v ${cls}">${fmtPct(pct)}</p></div>`;
-  }
-  function oscGridHtml(oscObj){
-    const chips = OSC_PERIODS.map(p => oscChipHtml(p.label, oscObj[p.key])).join('')
-      + oscChipHtml('Desde o início', oscObj.inicio);
-    return `<div class="osc-grid">${chips}</div>`;
-  }
-
-  // Prévia de um resgate (venda/desfazer posição): calcula, de forma proporcional
-  // ao valor atual, quanto do valor resgatado é principal e quanto é ganho, sugere
-  // uma alíquota de IR (regressiva pra renda fixa, 15% padrão pra renda variável) e
-  // devolve o valor líquido estimado. taxRateOverride (0–1) substitui a alíquota sugerida.
-  function previewRedeem(position, redeemDateISO, amount, taxRateOverride){
-    const now = replayPosition(position);
-    const currentValue = now.value;
-    if (currentValue <= 0 || !amount || amount <= 0) return null;
-    const fraction = Math.min(amount / currentValue, 1);
-    const costBasisRemoved = now.costBasis * fraction;
-    const costDateSumRemoved = now.costDateSum * fraction;
-    const quantityRemoved = now.quantity * fraction;
-    const gain = amount - costBasisRemoved;
-    let suggestedRate;
-    if (position.category === 'Renda Variável'){
-      suggestedRate = 0.15;
-    } else {
-      const weightedDateNum = now.costBasis > 0 ? now.costDateSum / now.costBasis : dateToNum(redeemDateISO);
-      const daysHeld = Math.max(0, dateToNum(redeemDateISO) - weightedDateNum);
-      suggestedRate = irRegressiveRate(daysHeld);
-    }
-    const rate = (taxRateOverride !== null && taxRateOverride !== undefined && !isNaN(taxRateOverride)) ? taxRateOverride : suggestedRate;
-    const taxDue = gain > 0 ? gain * rate : 0;
-    const netAmount = amount - taxDue;
-    return {
-      currentValue, fraction, costBasisRemoved, costDateSumRemoved, quantityRemoved,
-      gain, suggestedRate, rate, taxDue, netAmount,
-      full: amount >= currentValue - 0.005
-    };
-  }
-
-  // No carregamento, resgata automaticamente (a valor de mercado) qualquer título de
-  // Renda Fixa com vencimento definido já vencido, e joga o líquido pro saldo livre.
-  async function processMaturedFixedIncome(){
-    const today = todayISO();
-    let changed = false, count = 0;
-    state.investments.forEach(p => {
-      if (p.category === 'Renda Fixa' && p.maturity && p.maturity.type === 'definido' &&
-          p.maturity.date && p.maturity.date <= today && p.status !== 'encerrada'){
-        const st = replayPosition(p);
-        if (st.value > 0.005){
-          const preview = previewRedeem(p, p.maturity.date, st.value, null);
-          if (preview){
-            p.events.push({
-              id: uid(), type: 'resgate', date: p.maturity.date, amount: st.value,
-              costBasisRemoved: preview.costBasisRemoved, costDateSumRemoved: preview.costDateSumRemoved,
-              quantityRemoved: preview.quantityRemoved, gain: preview.gain,
-              taxRate: preview.suggestedRate, taxDue: preview.taxDue, netAmount: preview.netAmount,
-              full: true, note: 'Resgate automático no vencimento'
-            });
-            state.investCashBalance = (state.investCashBalance || 0) + preview.netAmount;
-            count++;
-          }
-        }
-        p.status = 'encerrada';
-        changed = true;
-      }
-    });
-    if (changed){
-      await saveInvestments();
-      await saveInvestCashBalance();
-    }
-    return count;
+    return { income, expense, saldo: income - expense, byBucket, essential, nonEssential, invested };
   }
 
   /* ---------------- rendering: Resumo ---------------- */
@@ -1554,6 +1253,14 @@
         </div>
       </div>
 
+      ${totals.invested > 0 ? `
+      <div class="invested-card">
+        <p class="eyebrow">Investido / guardado este mês</p>
+        <p class="invested-value serif">${fmtBRL(totals.invested)}</p>
+        <p class="invested-note">Separado do saldo acima — esse valor foi direcionado pra investimento/poupança, não é gasto.</p>
+      </div>
+      ` : ''}
+
       <div class="essential-row">
         <div class="essential-chip">
           <p class="k">Essencial</p>
@@ -1597,9 +1304,9 @@
           <div class="dot ${t.essential ? 'essential' : ''}"></div>
           <div class="info">
             <p class="desc">${escapeHtml(t.description || t.category)}</p>
-            <p class="meta">${t.category}${t.paymentMethod ? ' · ' + PAY_LABELS[t.paymentMethod] : ''}${t.account ? ' · ' + escapeHtml(t.account) : ''}</p>
+            <p class="meta">${t.category}${t.paymentMethod ? ' · ' + PAY_LABELS[t.paymentMethod] : ''}${t.account ? ' · ' + escapeHtml(t.account) : ''}${t.investment ? ' · <span class="invest-tag">Investimento</span>' : ''}</p>
           </div>
-          <div class="amt ${t.type === 'receita' ? 'income' : 'expense'}">${t.type === 'receita' ? '+' : '−'} ${fmtBRL(t.amount)}</div>
+          <div class="amt ${t.type === 'receita' ? 'income' : (t.investment ? 'invested' : 'expense')}">${t.type === 'receita' ? '+' : '−'} ${fmtBRL(t.amount)}</div>
           <button class="del" data-del="${t.id}" aria-label="Excluir">×</button>
         </div>
       `).join('');
@@ -1666,6 +1373,278 @@
     }).join('');
   }
 
+  /* ---------------- rendering: Investimentos ---------------- */
+  function categoryRowHtml(cat){
+    const positions = investmentsByCategory(cat);
+    const total = groupCurrentTotal(positions);
+    const osc = groupOscillation(positions, state.investPeriod);
+    const grandTotal = groupCurrentTotal(state.investments);
+    const pctOfTotal = grandTotal > 0 ? (total / grandTotal * 100) : 0;
+    return `
+      <div class="budget-item">
+        <div class="row1">
+          <span class="cat">${cat}</span>
+          <span class="nums"><strong>${fmtBRL(total)}</strong> · ${pctOfTotal.toFixed(0)}%</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill" style="width:${Math.min(pctOfTotal,100)}%"></div></div>
+        <div style="margin-top:8px; display:flex; justify-content:flex-end;">${oscBadgeHtml(osc)}</div>
+      </div>`;
+  }
+
+  function addPositionFormHtml(){
+    return `
+      <div class="manage-edit-row" style="margin-bottom:14px;">
+        <input type="text" id="newInvName" placeholder="Nome da posição (ex: Tesouro Selic 2029)">
+        <select id="newInvCategory">${INVESTMENT_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('')}</select>
+        <input type="date" id="newInvDate" value="${todayISO()}">
+        <input type="text" inputmode="decimal" id="newInvValue" placeholder="Valor inicial">
+        <div class="edit-actions">
+          <button type="button" class="btn btn-primary btn-small" id="saveNewInvBtn" style="flex:1;">Salvar posição</button>
+        </div>
+      </div>`;
+  }
+
+  function positionRowHtml(position){
+    const hist = sortHistory(position.history);
+    const latest = hist.length ? hist[hist.length - 1] : null;
+    const currentValue = latest ? latest.value : 0;
+    const osc = positionOscillation(position, state.investPeriod);
+
+    if (state.editingInvestmentId === position.id){
+      return `
+        <div class="manage-edit-row">
+          <input type="text" class="inv-edit-name" value="${escapeHtml(position.name)}">
+          <select class="inv-edit-category">${INVESTMENT_CATEGORIES.map(c => `<option value="${c}" ${c === position.category ? 'selected' : ''}>${c}</option>`).join('')}</select>
+          <div class="edit-actions">
+            <button type="button" class="btn btn-ghost btn-small" data-inv-edit-cancel="${position.id}">Cancelar</button>
+            <button type="button" class="btn btn-primary btn-small" data-inv-edit-save="${position.id}">Salvar</button>
+          </div>
+        </div>`;
+    }
+
+    const updateFormHtml = state.updatingInvestmentId === position.id ? `
+      <div class="manage-edit-row">
+        <input type="date" class="inv-update-date" value="${todayISO()}">
+        <input type="text" inputmode="decimal" class="inv-update-value" placeholder="Novo valor" value="${currentValue || ''}">
+        <div class="edit-actions">
+          <button type="button" class="btn btn-ghost btn-small" data-inv-update-cancel="${position.id}">Cancelar</button>
+          <button type="button" class="btn btn-primary btn-small" data-inv-update-save="${position.id}">Salvar valor</button>
+        </div>
+      </div>` : '';
+
+    const historyHtml = state.expandedInvestmentId === position.id ? `
+      <div class="position-history">
+        ${hist.length ? [...hist].reverse().map(h => `
+          <div class="history-row">
+            <span class="hd">${fmtDateBR(h.date)}</span>
+            <span class="hv">${fmtBRL(h.value)}</span>
+            <button type="button" class="icon-btn danger" data-inv-hist-del="${position.id}" data-hist-date="${h.date}" aria-label="Excluir registro">${ICON_DEL}</button>
+          </div>`).join('') : '<p class="manage-empty">Sem registros.</p>'}
+      </div>` : '';
+
+    return `
+      <div class="position-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; gap:8px; margin-bottom:10px;">
+          <span style="font-weight:600; font-size:14px;">${escapeHtml(position.name)}</span>
+          <span class="bucket-tag">${position.category}</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:8px;">
+          <div>
+            <div class="serif" style="font-size:19px; font-weight:600;">${fmtBRL(currentValue)}</div>
+            <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">Atualizado em ${latest ? fmtDateBR(latest.date) : '—'}</div>
+          </div>
+          ${oscBadgeHtml(osc)}
+        </div>
+        <div style="display:flex; gap:8px; margin-top:12px;">
+          <button type="button" class="btn btn-ghost btn-small" data-inv-update-toggle="${position.id}" style="flex:1;">Atualizar valor</button>
+          <button type="button" class="icon-btn" data-inv-edit="${position.id}" aria-label="Editar posição">${ICON_EDIT}</button>
+          <button type="button" class="icon-btn danger" data-inv-del="${position.id}" aria-label="Excluir posição">${ICON_DEL}</button>
+        </div>
+        ${updateFormHtml}
+        <button type="button" class="hist-toggle" data-inv-hist-toggle="${position.id}">${state.expandedInvestmentId === position.id ? 'Ocultar histórico' : `Ver histórico (${hist.length})`}</button>
+        ${historyHtml}
+      </div>`;
+  }
+
+  function renderInvestimentos(){
+    const el = document.getElementById('view-investimentos');
+    const total = groupCurrentTotal(state.investments);
+    const totalOsc = groupOscillation(state.investments, state.investPeriod);
+    const periodLabel = OSC_PERIODS.find(p => p.key === state.investPeriod).label;
+
+    el.innerHTML = `
+      <p class="section-title">Carteira de investimentos</p>
+
+      <div class="period-pills">
+        ${OSC_PERIODS.map(p => `<button type="button" class="period-pill ${state.investPeriod === p.key ? 'active' : ''}" data-period="${p.key}">${p.label}</button>`).join('')}
+      </div>
+
+      <div class="saldo-card">
+        <p class="eyebrow">Patrimônio total</p>
+        <p class="saldo-value">${fmtBRL(total)}</p>
+        <div>${oscBadgeHtml(totalOsc)} <span style="font-size:11.5px; color:var(--text-muted); margin-left:4px;">no período: ${periodLabel}</span></div>
+      </div>
+
+      ${state.investments.length === 0 ? '' : `
+      <p class="section-title" style="margin-top:26px;">Por tipo</p>
+      <div class="budget-list">
+        ${INVESTMENT_CATEGORIES.map(cat => categoryRowHtml(cat)).join('')}
+      </div>
+      `}
+
+      <p class="section-title" style="margin-top:28px;">
+        Posições
+        <button type="button" class="btn btn-ghost btn-small" id="toggleAddInvestBtn">${state.showAddInvestment ? 'Cancelar' : '+ Nova posição'}</button>
+      </p>
+
+      ${state.showAddInvestment ? addPositionFormHtml() : ''}
+
+      ${state.investments.length === 0 ? '<p class="manage-empty">Nenhuma posição cadastrada ainda. Toque em "+ Nova posição" pra começar.</p>' : state.investments.map(p => positionRowHtml(p)).join('')}
+    `;
+  }
+
+  document.getElementById('view-investimentos').addEventListener('click', async (e) => {
+    const periodBtn = e.target.closest('[data-period]');
+    if (periodBtn){
+      state.investPeriod = periodBtn.getAttribute('data-period');
+      renderInvestimentos();
+      return;
+    }
+
+    const toggleAddBtn = e.target.closest('#toggleAddInvestBtn');
+    if (toggleAddBtn){
+      state.showAddInvestment = !state.showAddInvestment;
+      renderInvestimentos();
+      return;
+    }
+    const saveNewBtn = e.target.closest('#saveNewInvBtn');
+    if (saveNewBtn){
+      const name = document.getElementById('newInvName').value.trim();
+      const category = document.getElementById('newInvCategory').value;
+      const date = document.getElementById('newInvDate').value || todayISO();
+      const value = parseDecimal(document.getElementById('newInvValue').value);
+      if (!name){ toast('Dê um nome pra posição'); return; }
+      if (Number.isNaN(value) || value < 0){ toast('Informe um valor inicial válido'); return; }
+      state.investments.push({
+        id: uid(),
+        name,
+        category,
+        history: [{ date, value }],
+        createdAt: Date.now()
+      });
+      await saveInvestments();
+      state.showAddInvestment = false;
+      toast('Posição criada');
+      renderInvestimentos();
+      return;
+    }
+
+    const editBtn = e.target.closest('[data-inv-edit]');
+    if (editBtn){
+      state.editingInvestmentId = editBtn.getAttribute('data-inv-edit');
+      state.updatingInvestmentId = null;
+      renderInvestimentos();
+      return;
+    }
+    const editCancel = e.target.closest('[data-inv-edit-cancel]');
+    if (editCancel){
+      state.editingInvestmentId = null;
+      renderInvestimentos();
+      return;
+    }
+    const editSave = e.target.closest('[data-inv-edit-save]');
+    if (editSave){
+      const id = editSave.getAttribute('data-inv-edit-save');
+      const row = editSave.closest('.manage-edit-row');
+      const name = row.querySelector('.inv-edit-name').value.trim();
+      const category = row.querySelector('.inv-edit-category').value;
+      if (!name){ toast('Dê um nome pra posição'); return; }
+      const pos = state.investments.find(p => p.id === id);
+      if (pos){
+        pos.name = name;
+        pos.category = category;
+        await saveInvestments();
+      }
+      state.editingInvestmentId = null;
+      toast('Posição atualizada');
+      renderInvestimentos();
+      return;
+    }
+
+    const delBtn = e.target.closest('[data-inv-del]');
+    if (delBtn){
+      const id = delBtn.getAttribute('data-inv-del');
+      const pos = state.investments.find(p => p.id === id);
+      if (!pos) return;
+      if (!confirm(`Excluir a posição "${pos.name}"? Todo o histórico dela será perdido.`)) return;
+      state.investments = state.investments.filter(p => p.id !== id);
+      await saveInvestments();
+      toast('Posição excluída');
+      renderInvestimentos();
+      return;
+    }
+
+    const updateToggle = e.target.closest('[data-inv-update-toggle]');
+    if (updateToggle){
+      const id = updateToggle.getAttribute('data-inv-update-toggle');
+      state.updatingInvestmentId = state.updatingInvestmentId === id ? null : id;
+      state.editingInvestmentId = null;
+      renderInvestimentos();
+      return;
+    }
+    const updateCancel = e.target.closest('[data-inv-update-cancel]');
+    if (updateCancel){
+      state.updatingInvestmentId = null;
+      renderInvestimentos();
+      return;
+    }
+    const updateSave = e.target.closest('[data-inv-update-save]');
+    if (updateSave){
+      const id = updateSave.getAttribute('data-inv-update-save');
+      const row = updateSave.closest('.manage-edit-row');
+      const date = row.querySelector('.inv-update-date').value;
+      const value = parseDecimal(row.querySelector('.inv-update-value').value);
+      if (!date){ toast('Escolha uma data'); return; }
+      if (Number.isNaN(value) || value < 0){ toast('Informe um valor válido'); return; }
+      const pos = state.investments.find(p => p.id === id);
+      if (pos){
+        const existing = pos.history.find(h => h.date === date);
+        if (existing) existing.value = value;
+        else pos.history.push({ date, value });
+        await saveInvestments();
+      }
+      state.updatingInvestmentId = null;
+      toast('Valor atualizado');
+      renderInvestimentos();
+      return;
+    }
+
+    const histToggle = e.target.closest('[data-inv-hist-toggle]');
+    if (histToggle){
+      const id = histToggle.getAttribute('data-inv-hist-toggle');
+      state.expandedInvestmentId = state.expandedInvestmentId === id ? null : id;
+      renderInvestimentos();
+      return;
+    }
+    const histDel = e.target.closest('[data-inv-hist-del]');
+    if (histDel){
+      const id = histDel.getAttribute('data-inv-hist-del');
+      const date = histDel.getAttribute('data-hist-date');
+      const pos = state.investments.find(p => p.id === id);
+      if (!pos) return;
+      if (pos.history.length <= 1){
+        toast('A posição precisa ter ao menos um registro. Pra removê-la de vez, exclua a posição inteira.');
+        return;
+      }
+      if (!confirm('Excluir esse registro do histórico?')) return;
+      pos.history = pos.history.filter(h => h.date !== date);
+      await saveInvestments();
+      toast('Registro excluído');
+      renderInvestimentos();
+      return;
+    }
+  });
+
   /* ---------------- rendering: Metas ---------------- */
   function renderMetas(){
     const el = document.getElementById('view-metas');
@@ -1679,7 +1658,7 @@
     `).join('');
 
     el.innerHTML = `
-      <p class="section-title">Metas de orçamento</p>
+      <p class="section-title">Suas metas de orçamento</p>
       <p style="font-size:12.5px; color:var(--text-muted); margin:-6px 0 16px; line-height:1.5;">
         Percentual ideal da sua receita mensal para cada categoria. É contra isso que o Resumo compara seus gastos reais.
       </p>
@@ -1792,7 +1771,7 @@
     }
 
     document.getElementById('exportBtn').addEventListener('click', () => {
-      const data = JSON.stringify({transactions: state.transactions, targets: state.targets, categories: state.categories, accounts: state.accounts, investments: state.investments, investCashBalance: state.investCashBalance}, null, 2);
+      const data = JSON.stringify({transactions: state.transactions, targets: state.targets, categories: state.categories, accounts: state.accounts, investments: state.investments}, null, 2);
       const blob = new Blob([data], {type:'application/json'});
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
@@ -1834,10 +1813,6 @@
         if (Array.isArray(data.investments)){
           state.investments = data.investments;
           await saveInvestments();
-        }
-        if (typeof data.investCashBalance === 'number'){
-          state.investCashBalance = data.investCashBalance;
-          await saveInvestCashBalance();
         }
         toast('Dados importados');
         renderAll();
@@ -1908,262 +1883,6 @@
     `;
   }
 
-  /* ---------------- rendering: Investimentos ---------------- */
-  function renderInvestimentos(){
-    const el = document.getElementById('view-investimentos');
-    const cashCard = `
-      <div class="invest-cash-card">
-        <div>
-          <p class="k">Saldo livre para investir</p>
-          <p class="v">${fmtBRL(state.investCashBalance || 0)}</p>
-        </div>
-      </div>`;
-
-    if (state.investments.length === 0){
-      el.innerHTML = cashCard + `<div class="empty-state">
-        <p class="big">Nenhuma posição ainda</p>
-        <p>Toque no botão abaixo para registrar sua primeira posição de Renda Fixa, Renda Variável ou Reserva de Emergência.</p>
-      </div>
-      <button class="btn btn-primary" id="addInvestBtn">+ Nova posição</button>`;
-      document.getElementById('addInvestBtn').addEventListener('click', () => openInvestSheet());
-      return;
-    }
-
-    const totalAgg = aggregateOscillations(state.investments);
-    const catBlocks = INVEST_CATEGORIES.map(cat => {
-      const positions = positionsByCategory(cat);
-      const catAgg = aggregateOscillations(positions);
-      const positionsHtml = positions.length === 0
-        ? `<p class="invest-cat-empty">Nenhuma posição em ${cat}.</p>`
-        : positions.map(p => renderPositionHtml(p)).join('');
-      return `
-        <div class="invest-cat-block">
-          <div class="invest-cat-header">
-            <span class="name">${cat}</span>
-            <span class="total serif">${fmtBRL(catAgg.current)}</span>
-          </div>
-          ${positionsHtml}
-        </div>`;
-    }).join('');
-
-    el.innerHTML = cashCard + `
-      <div class="invest-total-card">
-        <p class="eyebrow">Patrimônio total investido</p>
-        <p class="invest-total-value serif">${fmtBRL(totalAgg.current)}</p>
-        <div class="invest-total-sub">
-          ${INVEST_CATEGORIES.map(cat => `
-            <div>
-              <p class="k">${cat}</p>
-              <p class="v">${fmtBRL(currentTotal(positionsByCategory(cat)))}</p>
-            </div>`).join('')}
-        </div>
-        ${oscGridHtml(totalAgg.osc)}
-      </div>
-
-      <p class="section-title">Suas posições</p>
-      ${catBlocks}
-
-      <button class="btn btn-primary" id="addInvestBtn">+ Nova posição</button>
-    `;
-    document.getElementById('addInvestBtn').addEventListener('click', () => openInvestSheet());
-  }
-
-  function renderPositionHtml(p){
-    const now = replayPosition(p);
-    const osc = positionOscillations(p);
-    const monthPct = osc.mes;
-    const chipCls = (monthPct === null || monthPct === undefined) ? 'na' : (monthPct > 0 ? 'pos' : (monthPct < 0 ? 'neg' : ''));
-    const chipTxt = (monthPct === null || monthPct === undefined) ? 'sem dado' : fmtPct(monthPct) + ' no mês';
-    const isOpen = state.expandedInvestmentId === p.id;
-    const isEditing = state.editingInvestmentId === p.id;
-    const isClosed = p.status === 'encerrada';
-    const qtyPM = positionQuantityPM(p);
-    const gain = now.value - now.costBasis;
-    const gainPct = now.costBasis > 0 ? (gain / now.costBasis) * 100 : null;
-    const today = todayISO();
-
-    let maturityLine = '';
-    let maturityBanner = '';
-    if (p.category === 'Renda Fixa'){
-      if (p.maturity && p.maturity.type === 'definido' && p.maturity.date){
-        const vencido = p.maturity.date <= today;
-        maturityLine = `<p class="invest-maturity-line">Vencimento: ${fmtDateBR(p.maturity.date)}${vencido && !isClosed ? ' · vencido' : ''}</p>`;
-        if (vencido && !isClosed){
-          maturityBanner = `<div class="invest-maturity-banner">Este título já venceu. Ele será resgatado automaticamente (a valor de mercado, com estimativa de IR) na próxima vez que o app carregar.</div>`;
-        }
-      } else {
-        maturityLine = `<p class="invest-maturity-line">Vencimento: indefinido</p>`;
-      }
-    }
-
-    const events = sortedEvents(p).slice().reverse();
-    const eventsHtml = events.map(e => {
-      if (e.type === 'aporte'){
-        return `<div class="invest-history-item">
-          <span class="d">${fmtDateBR(e.date)} · aporte</span>
-          <span class="v">${fmtBRL(e.amount)}</span>
-          <button type="button" class="del-h" data-del-event="${p.id}|${e.id}" aria-label="Excluir">×</button>
-        </div>`;
-      }
-      if (e.type === 'mark'){
-        return `<div class="invest-history-item">
-          <span class="d">${fmtDateBR(e.date)} · valor de mercado</span>
-          <span class="v">${fmtBRL(e.value)}</span>
-          <button type="button" class="del-h" data-del-event="${p.id}|${e.id}" aria-label="Excluir">×</button>
-        </div>`;
-      }
-      return `<div class="invest-history-item">
-        <span class="d">${fmtDateBR(e.date)} · resgate${e.full ? ' total' : ' parcial'}${e.note ? ' (' + escapeHtml(e.note) + ')' : ''}</span>
-        <span class="v">${fmtBRL(e.amount)}${e.taxDue > 0.005 ? ' · IR ' + fmtBRL(e.taxDue) : ''}</span>
-        <button type="button" class="del-h" data-del-event="${p.id}|${e.id}" aria-label="Excluir">×</button>
-      </div>`;
-    }).join('');
-
-    const detailHtml = isOpen ? `
-      <div class="invest-position-detail">
-        ${maturityBanner}
-        <p class="detail-title">Oscilação</p>
-        ${oscGridHtml(osc)}
-
-        <p class="detail-title">Histórico</p>
-        <div class="invest-history-list">${eventsHtml || '<p class="invest-cat-empty">Sem eventos.</p>'}</div>
-
-        ${!isClosed ? `
-        <div class="invest-add-snap">
-          <input type="date" class="snap-date" data-snap-date="${p.id}" value="${today}">
-          <input type="number" inputmode="decimal" step="0.01" min="0" class="snap-value" data-snap-value="${p.id}" placeholder="Novo valor de mercado (R$)">
-          <button type="button" class="btn btn-primary btn-small" data-snap-save="${p.id}">Atualizar valor de mercado</button>
-        </div>` : ''}
-
-        ${isEditing ? `
-        <div class="invest-edit-row">
-          <input type="text" class="pos-edit-name" value="${escapeHtml(p.name)}">
-          <select class="pos-edit-cat">${INVEST_CATEGORIES.map(c => `<option value="${c}" ${c===p.category?'selected':''}>${c}</option>`).join('')}</select>
-          <div class="field-full pos-edit-mat-wrap" style="${p.category === 'Renda Fixa' ? '' : 'display:none;'}">
-            <label>Vencimento</label>
-            <div class="seg pos-edit-mat-seg">
-              <button type="button" class="seg-btn ${(!p.maturity || p.maturity.type==='indefinido') ? 'active' : ''}" data-val="indefinido">Indefinido</button>
-              <button type="button" class="seg-btn ${(p.maturity && p.maturity.type==='definido') ? 'active' : ''}" data-val="definido">Data definida</button>
-            </div>
-            <input type="date" class="pos-edit-mat-date" value="${(p.maturity && p.maturity.date) ? p.maturity.date : ''}" style="${(p.maturity && p.maturity.type==='definido') ? '' : 'display:none;'} margin-top:8px;">
-          </div>
-          <div class="edit-actions">
-            <button type="button" class="btn btn-ghost btn-small" data-pos-edit-cancel="${p.id}">Cancelar</button>
-            <button type="button" class="btn btn-primary btn-small" data-pos-edit-save="${p.id}">Salvar</button>
-          </div>
-        </div>` : `
-        <div class="actions-row">
-          ${!isClosed ? `<button type="button" class="btn btn-ghost" data-pos-lot="${p.id}">Aumentar posição</button>` : ''}
-          ${!isClosed ? `<button type="button" class="btn btn-ghost" data-pos-redeem="${p.id}">Desfazer posição</button>` : ''}
-        </div>
-        <div class="actions-row">
-          <button type="button" class="btn btn-ghost" data-pos-edit="${p.id}">Editar</button>
-          <button type="button" class="btn btn-danger" data-pos-del="${p.id}">Excluir posição</button>
-        </div>`}
-      </div>` : '';
-
-    return `
-      <div class="invest-position ${isOpen ? 'open' : ''}">
-        <div class="invest-position-row" data-toggle="${p.id}">
-          <div class="info">
-            <p class="nm">${escapeHtml(p.name)}${isClosed ? '<span class="invest-status-badge">encerrada</span>' : ''}</p>
-            <p class="sub">Atualizado em ${now.lastEventDate ? fmtDateBR(now.lastEventDate) : '—'}</p>
-            ${qtyPM ? `<p class="invest-pm-line">${qtyPM.quantity.toLocaleString('pt-BR', {maximumFractionDigits:6})} un. · PM ${fmtBRL(qtyPM.pm)}</p>` : ''}
-            ${now.costBasis > 0 ? `<p class="invest-gain-line ${gain>0?'pos':(gain<0?'neg':'')}">Ganho: ${fmtBRL(gain)}${gainPct!==null? ' ('+fmtPct(gainPct)+')' : ''}</p>` : ''}
-            ${maturityLine}
-          </div>
-          <div class="val">
-            <p class="amt serif">${fmtBRL(now.value)}</p>
-            <p class="chip ${chipCls}">${chipTxt}</p>
-          </div>
-          <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-        </div>
-        ${detailHtml}
-      </div>`;
-  }
-
-  function openInvestSheet(){
-    document.getElementById('fInvName').value = '';
-    document.getElementById('fInvDate').value = todayISO();
-    document.getElementById('fInvValue').value = '';
-    document.getElementById('fInvQty').value = '';
-    document.getElementById('fInvMaturityDate').value = '';
-    document.getElementById('fInvMaturityDate').style.display = 'none';
-    document.querySelectorAll('#fInvMaturityType .seg-btn').forEach(b => b.classList.toggle('active', b.dataset.val === 'indefinido'));
-    const sel = document.getElementById('fInvCategory');
-    sel.innerHTML = INVEST_CATEGORIES.map(c => `<option value="${c}">${c}</option>`).join('');
-    document.getElementById('fInvMaturityWrap').style.display = sel.value === 'Renda Fixa' ? 'block' : 'none';
-    investBackdrop.classList.add('show');
-    investSheet.classList.add('show');
-  }
-  function closeInvestSheet(){
-    investBackdrop.classList.remove('show');
-    investSheet.classList.remove('show');
-  }
-
-  function openLotSheet(positionId){
-    const p = state.investments.find(x => x.id === positionId);
-    if (!p) return;
-    state.lotPositionId = positionId;
-    document.getElementById('lotPositionName').textContent = p.name;
-    document.getElementById('fLotDate').value = todayISO();
-    document.getElementById('fLotValue').value = '';
-    document.getElementById('fLotQty').value = '';
-    document.getElementById('fLotFromBalance').classList.remove('on');
-    document.getElementById('lotBalanceHint').textContent = fmtBRL(state.investCashBalance || 0);
-    lotBackdrop.classList.add('show');
-    lotSheet.classList.add('show');
-  }
-  function closeLotSheet(){
-    lotBackdrop.classList.remove('show');
-    lotSheet.classList.remove('show');
-  }
-
-  function openRedeemSheet(positionId){
-    const p = state.investments.find(x => x.id === positionId);
-    if (!p) return;
-    state.redeemPositionId = positionId;
-    const now = replayPosition(p);
-    document.getElementById('redeemPositionName').textContent = p.name;
-    document.getElementById('fRedeemDate').value = todayISO();
-    document.getElementById('fRedeemValue').value = now.value ? now.value.toFixed(2) : '';
-    document.getElementById('fRedeemRate').value = '';
-    updateRedeemPreview();
-    redeemBackdrop.classList.add('show');
-    redeemSheet.classList.add('show');
-  }
-  function closeRedeemSheet(){
-    redeemBackdrop.classList.remove('show');
-    redeemSheet.classList.remove('show');
-  }
-  function updateRedeemPreview(){
-    const p = state.investments.find(x => x.id === state.redeemPositionId);
-    const previewEl = document.getElementById('redeemPreview');
-    const noteEl = document.getElementById('redeemNote');
-    if (!p){ previewEl.innerHTML = ''; noteEl.textContent = ''; return; }
-    const date = document.getElementById('fRedeemDate').value || todayISO();
-    const amount = Number(document.getElementById('fRedeemValue').value);
-    const rateInput = document.getElementById('fRedeemRate').value;
-    const rateOverride = rateInput === '' ? null : Number(rateInput) / 100;
-    const preview = previewRedeem(p, date, amount, rateOverride);
-    if (!preview){
-      previewEl.innerHTML = `<div class="row"><span class="k">Informe um valor válido</span></div>`;
-      noteEl.textContent = '';
-      return;
-    }
-    if (rateInput === ''){
-      document.getElementById('fRedeemRate').value = (preview.suggestedRate * 100).toFixed(1);
-    }
-    previewEl.innerHTML = `
-      <div class="row"><span class="k">Ganho estimado</span><span class="v">${fmtBRL(preview.gain)}</span></div>
-      <div class="row"><span class="k">IR estimado</span><span class="v">${fmtBRL(preview.taxDue)}</span></div>
-      <div class="row total"><span class="k">Valor líquido</span><span class="v">${fmtBRL(preview.netAmount)}</span></div>
-    `;
-    noteEl.textContent = p.category === 'Renda Variável'
-      ? 'Ações costumam ser isentas de IR se o total de vendas no mês não passar de R$ 20.000; acima disso, geralmente 15% sobre o ganho, apurado e pago via DARF até o último dia útil do mês seguinte. Ajuste a alíquota se souber que é diferente. Isso é uma estimativa educativa, não substitui orientação de um contador.'
-      : 'IR sobre renda fixa costuma ser retido na fonte pela instituição no resgate, pela tabela regressiva (22,5% até 180 dias, 20% até 360, 17,5% até 720, 15% acima disso). Se este título for isento (LCI, LCA, poupança), ajuste a alíquota para 0%. Isso é uma estimativa educativa, não substitui orientação de um contador.';
-  }
-
   /* ---------------- tab / month controls ---------------- */
   function renderAll(){
     document.getElementById('monthLabel').textContent = monthLabel(state.currentMonth);
@@ -2179,6 +1898,9 @@
     document.querySelectorAll('nav.tabbar button').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
     document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
     document.getElementById('view-' + tab).classList.add('active');
+    const monthIrrelevant = (tab === 'metas' || tab === 'investimentos');
+    document.querySelector('.month-nav').style.display = monthIrrelevant ? 'none' : 'flex';
+    document.getElementById('fabAdd').style.display = (tab === 'investimentos') ? 'none' : 'flex';
   }
 
   document.querySelectorAll('nav.tabbar button').forEach(b => {
@@ -2318,261 +2040,9 @@
     }
   });
 
-  /* ---------------- investimentos: interações ---------------- */
-  document.getElementById('view-investimentos').addEventListener('change', (e) => {
-    if (e.target.classList.contains('pos-edit-cat')){
-      const wrap = e.target.closest('.invest-edit-row').querySelector('.pos-edit-mat-wrap');
-      if (wrap) wrap.style.display = e.target.value === 'Renda Fixa' ? 'block' : 'none';
-    }
-  });
-
-  document.getElementById('view-investimentos').addEventListener('click', async (e) => {
-    const toggleId = e.target.closest('[data-toggle]') ? e.target.closest('[data-toggle]').getAttribute('data-toggle') : null;
-    if (toggleId && !e.target.closest('button')){
-      state.expandedInvestmentId = state.expandedInvestmentId === toggleId ? null : toggleId;
-      state.editingInvestmentId = null;
-      renderInvestimentos();
-      return;
-    }
-
-    const editBtn = e.target.closest('[data-pos-edit]');
-    if (editBtn){
-      state.editingInvestmentId = editBtn.getAttribute('data-pos-edit');
-      renderInvestimentos();
-      return;
-    }
-    const editCancel = e.target.closest('[data-pos-edit-cancel]');
-    if (editCancel){
-      state.editingInvestmentId = null;
-      renderInvestimentos();
-      return;
-    }
-    const editSave = e.target.closest('[data-pos-edit-save]');
-    if (editSave){
-      const id = editSave.getAttribute('data-pos-edit-save');
-      const row = editSave.closest('.invest-edit-row');
-      const newName = row.querySelector('.pos-edit-name').value.trim();
-      const newCat = row.querySelector('.pos-edit-cat').value;
-      if (!newName){
-        toast('Dê um nome pra posição');
-        return;
-      }
-      const pos = state.investments.find(p => p.id === id);
-      if (pos){
-        pos.name = newName;
-        pos.category = newCat;
-        if (newCat === 'Renda Fixa'){
-          const seg = row.querySelector('.pos-edit-mat-seg');
-          const type = seg ? (seg.querySelector('.seg-btn.active') || {}).dataset?.val || 'indefinido' : 'indefinido';
-          const dateVal = row.querySelector('.pos-edit-mat-date') ? row.querySelector('.pos-edit-mat-date').value : '';
-          pos.maturity = type === 'definido' ? { type: 'definido', date: dateVal || null } : { type: 'indefinido', date: null };
-        } else {
-          pos.maturity = null;
-        }
-        await saveInvestments();
-      }
-      state.editingInvestmentId = null;
-      toast('Posição atualizada');
-      renderInvestimentos();
-      return;
-    }
-    const matSegBtn = e.target.closest('.pos-edit-mat-seg .seg-btn');
-    if (matSegBtn){
-      const seg = matSegBtn.closest('.pos-edit-mat-seg');
-      seg.querySelectorAll('.seg-btn').forEach(b => b.classList.toggle('active', b === matSegBtn));
-      const dateInput = seg.parentElement.querySelector('.pos-edit-mat-date');
-      if (dateInput) dateInput.style.display = matSegBtn.dataset.val === 'definido' ? 'block' : 'none';
-      return;
-    }
-
-    const delPosBtn = e.target.closest('[data-pos-del]');
-    if (delPosBtn){
-      const id = delPosBtn.getAttribute('data-pos-del');
-      const pos = state.investments.find(p => p.id === id);
-      if (!pos) return;
-      if (!confirm(`Excluir a posição "${pos.name}" e todo o seu histórico?`)) return;
-      state.investments = state.investments.filter(p => p.id !== id);
-      if (state.expandedInvestmentId === id) state.expandedInvestmentId = null;
-      await saveInvestments();
-      toast('Posição excluída');
-      renderInvestimentos();
-      return;
-    }
-
-    const delEventBtn = e.target.closest('[data-del-event]');
-    if (delEventBtn){
-      const [posId, eventId] = delEventBtn.getAttribute('data-del-event').split('|');
-      const pos = state.investments.find(p => p.id === posId);
-      if (!pos) return;
-      if (pos.events.length <= 1){
-        toast('A posição precisa ter pelo menos um evento');
-        return;
-      }
-      if (!confirm('Excluir esse registro? Isso pode alterar o valor, PM e histórico de oscilação da posição.')) return;
-      pos.events = pos.events.filter(ev => ev.id !== eventId);
-      await saveInvestments();
-      toast('Registro excluído');
-      renderInvestimentos();
-      return;
-    }
-
-    const snapSaveBtn = e.target.closest('[data-snap-save]');
-    if (snapSaveBtn){
-      const posId = snapSaveBtn.getAttribute('data-snap-save');
-      const pos = state.investments.find(p => p.id === posId);
-      if (!pos) return;
-      const dateInput = el_qs(`[data-snap-date="${posId}"]`);
-      const valueInput = el_qs(`[data-snap-value="${posId}"]`);
-      const date = dateInput.value || todayISO();
-      const value = Number(valueInput.value);
-      if (!value || value < 0){
-        toast('Informe um valor válido');
-        return;
-      }
-      pos.events.push({ id: uid(), type: 'mark', date, value });
-      await saveInvestments();
-      toast('Valor de mercado atualizado');
-      renderInvestimentos();
-      return;
-    }
-
-    const lotBtn = e.target.closest('[data-pos-lot]');
-    if (lotBtn){
-      openLotSheet(lotBtn.getAttribute('data-pos-lot'));
-      return;
-    }
-    const redeemBtn = e.target.closest('[data-pos-redeem]');
-    if (redeemBtn){
-      openRedeemSheet(redeemBtn.getAttribute('data-pos-redeem'));
-      return;
-    }
-  });
-  function el_qs(sel){ return document.getElementById('view-investimentos').querySelector(sel); }
-
-  /* --- sheet: nova posição --- */
-  document.getElementById('cancelInvestBtn').addEventListener('click', closeInvestSheet);
-  document.getElementById('investBackdrop').addEventListener('click', closeInvestSheet);
-  document.getElementById('fInvCategory').addEventListener('change', (e) => {
-    document.getElementById('fInvMaturityWrap').style.display = e.target.value === 'Renda Fixa' ? 'block' : 'none';
-  });
-  document.getElementById('fInvMaturityType').addEventListener('click', (e) => {
-    const btn = e.target.closest('.seg-btn');
-    if (!btn) return;
-    document.querySelectorAll('#fInvMaturityType .seg-btn').forEach(b => b.classList.toggle('active', b === btn));
-    document.getElementById('fInvMaturityDate').style.display = btn.dataset.val === 'definido' ? 'block' : 'none';
-  });
-
-  document.getElementById('saveInvestBtn').addEventListener('click', async () => {
-    const name = document.getElementById('fInvName').value.trim();
-    const category = document.getElementById('fInvCategory').value;
-    const date = document.getElementById('fInvDate').value || todayISO();
-    const value = Number(document.getElementById('fInvValue').value);
-    const qtyRaw = document.getElementById('fInvQty').value;
-    const quantity = qtyRaw === '' ? null : Number(qtyRaw);
-    if (!name){
-      toast('Dê um nome pra posição');
-      return;
-    }
-    if (!value || value < 0){
-      toast('Informe um valor válido');
-      return;
-    }
-    let maturity = null;
-    if (category === 'Renda Fixa'){
-      const type = (document.querySelector('#fInvMaturityType .seg-btn.active') || {}).dataset?.val || 'indefinido';
-      const matDate = document.getElementById('fInvMaturityDate').value;
-      maturity = type === 'definido' ? { type: 'definido', date: matDate || null } : { type: 'indefinido', date: null };
-    }
-    state.investments.push({
-      id: uid(),
-      name,
-      category,
-      status: 'aberta',
-      maturity,
-      events: [{ id: uid(), type: 'aporte', date, amount: value, quantity }]
-    });
-    await saveInvestments();
-    closeInvestSheet();
-    toast('Posição criada');
-    renderInvestimentos();
-  });
-
-  /* --- sheet: aumentar posição (aporte) --- */
-  document.getElementById('cancelLotBtn').addEventListener('click', closeLotSheet);
-  document.getElementById('lotBackdrop').addEventListener('click', closeLotSheet);
-  document.getElementById('fLotFromBalance').addEventListener('click', () => {
-    document.getElementById('fLotFromBalance').classList.toggle('on');
-  });
-  document.getElementById('saveLotBtn').addEventListener('click', async () => {
-    const pos = state.investments.find(p => p.id === state.lotPositionId);
-    if (!pos) return;
-    const date = document.getElementById('fLotDate').value || todayISO();
-    const amount = Number(document.getElementById('fLotValue').value);
-    const qtyRaw = document.getElementById('fLotQty').value;
-    const quantity = qtyRaw === '' ? null : Number(qtyRaw);
-    const fromBalance = document.getElementById('fLotFromBalance').classList.contains('on');
-    if (!amount || amount < 0){
-      toast('Informe um valor válido');
-      return;
-    }
-    if (fromBalance && amount > (state.investCashBalance || 0) + 0.005){
-      toast('Saldo livre insuficiente pra esse aporte');
-      return;
-    }
-    pos.events.push({ id: uid(), type: 'aporte', date, amount, quantity, fundedFromBalance: fromBalance });
-    if (fromBalance){
-      state.investCashBalance = (state.investCashBalance || 0) - amount;
-      await saveInvestCashBalance();
-    }
-    await saveInvestments();
-    closeLotSheet();
-    toast('Aporte registrado');
-    renderInvestimentos();
-  });
-
-  /* --- sheet: desfazer posição (resgate) --- */
-  document.getElementById('cancelRedeemBtn').addEventListener('click', closeRedeemSheet);
-  document.getElementById('redeemBackdrop').addEventListener('click', closeRedeemSheet);
-  document.getElementById('fRedeemDate').addEventListener('change', updateRedeemPreview);
-  document.getElementById('fRedeemValue').addEventListener('input', updateRedeemPreview);
-  document.getElementById('fRedeemRate').addEventListener('input', updateRedeemPreview);
-  document.getElementById('saveRedeemBtn').addEventListener('click', async () => {
-    const pos = state.investments.find(p => p.id === state.redeemPositionId);
-    if (!pos) return;
-    const date = document.getElementById('fRedeemDate').value || todayISO();
-    const amount = Number(document.getElementById('fRedeemValue').value);
-    const rateInput = document.getElementById('fRedeemRate').value;
-    const rateOverride = rateInput === '' ? null : Number(rateInput) / 100;
-    const preview = previewRedeem(pos, date, amount, rateOverride);
-    if (!preview){
-      toast('Informe um valor válido');
-      return;
-    }
-    pos.events.push({
-      id: uid(), type: 'resgate', date, amount,
-      costBasisRemoved: preview.costBasisRemoved, costDateSumRemoved: preview.costDateSumRemoved,
-      quantityRemoved: preview.quantityRemoved, gain: preview.gain,
-      taxRate: preview.rate, taxDue: preview.taxDue, netAmount: preview.netAmount,
-      full: preview.full, note: ''
-    });
-    if (preview.full) pos.status = 'encerrada';
-    state.investCashBalance = (state.investCashBalance || 0) + preview.netAmount;
-    await saveInvestments();
-    await saveInvestCashBalance();
-    closeRedeemSheet();
-    toast(preview.full ? 'Posição encerrada' : 'Resgate registrado');
-    renderInvestimentos();
-  });
-
   /* ---------------- add-transaction sheet ---------------- */
   const sheet = document.getElementById('sheet');
   const backdrop = document.getElementById('backdrop');
-  const investSheet = document.getElementById('investSheet');
-  const investBackdrop = document.getElementById('investBackdrop');
-  const lotSheet = document.getElementById('lotSheet');
-  const lotBackdrop = document.getElementById('lotBackdrop');
-  const redeemSheet = document.getElementById('redeemSheet');
-  const redeemBackdrop = document.getElementById('redeemBackdrop');
 
   function populateCategorySelect(selectValue){
     const sel = document.getElementById('fCategory');
@@ -2644,6 +2114,8 @@
     document.getElementById('typeExpenseBtn').classList.toggle('active', type === 'despesa');
     document.getElementById('typeIncomeBtn').classList.toggle('active', type === 'receita');
     document.getElementById('essentialRow').style.display = type === 'despesa' ? 'flex' : 'none';
+    document.getElementById('investmentRow').style.display = type === 'despesa' ? 'flex' : 'none';
+    document.getElementById('investmentHint').style.display = type === 'despesa' ? 'block' : 'none';
     document.getElementById('payMethodField').style.display = type === 'despesa' ? 'block' : 'none';
     document.getElementById('recurringRow').style.display = (type === 'receita' && !state.editingId) ? 'flex' : 'none';
     if (type !== 'despesa'){
@@ -2675,6 +2147,9 @@
   const essSwitch = document.getElementById('fEssential');
   essSwitch.addEventListener('click', () => essSwitch.classList.toggle('on'));
 
+  const investSwitch = document.getElementById('fInvestment');
+  investSwitch.addEventListener('click', () => investSwitch.classList.toggle('on'));
+
   const recurringSwitch = document.getElementById('fRecurring');
   recurringSwitch.addEventListener('click', () => {
     recurringSwitch.classList.toggle('on');
@@ -2701,6 +2176,7 @@
     populateAccountSelect(txn ? (txn.account || '') : '');
 
     if (txn && txn.essential){ essSwitch.classList.add('on'); } else if (txn){ essSwitch.classList.remove('on'); } else { essSwitch.classList.add('on'); }
+    if (txn && txn.investment){ investSwitch.classList.add('on'); } else { investSwitch.classList.remove('on'); }
 
     state.paymentMethod = txn ? (txn.paymentMethod || 'pix') : 'pix';
     document.querySelectorAll('.pay-btn').forEach(b => b.classList.toggle('active', b.dataset.pay === state.paymentMethod));
@@ -2722,12 +2198,13 @@
   backdrop.addEventListener('click', closeSheet);
 
   document.getElementById('saveBtn').addEventListener('click', async () => {
-    const amount = Number(document.getElementById('fAmount').value);
+    const amount = parseDecimal(document.getElementById('fAmount').value);
     const date = document.getElementById('fDate').value || todayISO();
     const description = document.getElementById('fDesc').value.trim();
     const category = document.getElementById('fCategory').value;
     const account = document.getElementById('fAccount').value;
     const essential = essSwitch.classList.contains('on');
+    const isInvestment = investSwitch.classList.contains('on');
 
     if (!amount || amount <= 0){
       toast('Informe um valor válido');
@@ -2759,7 +2236,8 @@
         type: state.formType,
         amount, date, description, category, bucket, account,
         paymentMethod,
-        essential: isDespesa ? essential : false
+        essential: isDespesa ? essential : false,
+        investment: isDespesa ? isInvestment : false
       };
       await saveTxns();
       closeSheet();
@@ -2792,6 +2270,7 @@
         installment: (isDespesa && installments > 1) ? { index: i+1, total: installments, groupId } : null,
         recurring: (isRecurring) ? { index: i+1, total: recurringMonths, groupId } : null,
         essential: isDespesa ? essential : false,
+        investment: isDespesa ? isInvestment : false,
         createdAt: Date.now()
       });
     }
@@ -2811,11 +2290,8 @@
 
   /* ---------------- init ---------------- */
   (async function init(){
-    const maturedCount = await loadAll();
+    await loadAll();
     renderAll();
-    if (maturedCount > 0){
-      toast(maturedCount === 1 ? '1 título venceu e foi resgatado automaticamente' : `${maturedCount} títulos venceram e foram resgatados automaticamente`);
-    }
   })();
 
 })();
